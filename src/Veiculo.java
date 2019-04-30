@@ -13,19 +13,19 @@ public class Veiculo {
 		st = new SensorToque();
 	}
 	
-	public void setMotorsEqualPower(int power)
+	public void setVelocidadeEsteiras(int rps)
 	{
-		this.dir.setVelocidade(power);
-		this.esq.setVelocidade(power);
+		this.dir.setVelocidade(rps);
+		this.esq.setVelocidade(rps);
 	}
 	//como a frente do robo agora eh o sensor e nao a garra, os movimentos foram
 	//invertidos com relacao a classe tracker 
-	public void setMotorsForward()
+	public void setEsteirasForward()
 	{
 		this.dir.ligaFrente();
 		this.esq.ligaFrente();		
 	}
-	public void setMotorsBackward()
+	public void setEsteirasBackward()
 	{
 		this.dir.ligaTras();
 		this.esq.ligaTras();
@@ -35,26 +35,25 @@ public class Veiculo {
 	{
 		this.dir.freia();
 		this.esq.freia();
-//		this.helice.stop();
 	}
-//	public void turnRight()
-//	{
-//		this.dir.setVelocidade(-50);
-//		this.esq.setVelocidade(50);
-//		//this.setMotorsForward();
-//	}
-	public void turnLeft()
+	public void curvaDireita()
+	{
+		this.dir.setVelocidade(-50);
+		this.esq.setVelocidade(50);
+		this.setEsteirasForward();
+	}
+	public void curvaEsquerda()
 	{
 		this.dir.setVelocidade(50);
 		this.esq.setVelocidade(-50);
-		this.setMotorsForward();
+		this.setEsteirasForward();
 	}
 
 	/*
 	 * public void inverteFrente() { this.dir.closeMotor(); this.esq.closeMotor();
 	 * this.dir = new Esteira("L"); this.esq = new Esteira("R"); }
 	 */
-	public void trackerOff()
+	public void fechaPortas()
 	{
 		this.dir.closeMotor();
 		this.esq.closeMotor();
@@ -74,8 +73,8 @@ public class Veiculo {
 //			carro.g.abre();
 //			Button.waitForAnyPress();
 //			carro.g.fecha();
-			carro.setMotorsEqualPower(360);
-			carro.setMotorsForward();
+			carro.setVelocidadeEsteiras(360);
+			carro.setEsteirasForward();
 //			motorLargo.forward();
 		}
 		
