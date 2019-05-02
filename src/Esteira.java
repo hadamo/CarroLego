@@ -1,15 +1,6 @@
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import lejos.hardware.port.MotorPort;
 import lejos.utility.Delay;
 
 public class Esteira extends MotorLargo{
-//	private MotorLargo roda;
-//	private int velocidade;
-//	private int tacometro;
-//	public boolean DIRECAOPADRAO = FRENTE;
-
-//	private float velocidade; // rotacoes por segundo (rps)
-	
 	/**
 	 * Construtor de Esteira
 	 * 
@@ -42,7 +33,6 @@ public class Esteira extends MotorLargo{
 		this.motorLargo.forward();
 		Delay.msDelay(tempo*1000);
 		this.motorLargo.stop();
-		
 	}
 
 	public void ligaTras() {
