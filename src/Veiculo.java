@@ -5,12 +5,14 @@ public class Veiculo {
 	public Garra garra;
 	public Esteira dir,esq;
 	public SensorToque st;
+	public EV3Cerebro ev3;
 	public Veiculo()
 	{
 		garra = new Garra();
 		dir = new Esteira("R");
 		esq = new Esteira("L");
 		st = new SensorToque();
+		ev3 = new EV3Cerebro();
 	}
 	
 	public void setVelocidadeEsteiras(int rps)

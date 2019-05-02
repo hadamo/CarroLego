@@ -7,10 +7,13 @@ public class Uso {
 		carro.setVelocidadeEsteiras(360);
 		//anda pra frente por 5s
 		carro.setEsteirasForward(5);
+		//toca um som
+		carro.ev3.beep1();
 		
 		//anda para tras por 5s
 		carro.setEsteirasBackward(5);
 		
+		carro.ev3.beep5();
 		//curva para a direita e depois para a esquerda
 		carro.curvaDireita();
 		carro.stop();
