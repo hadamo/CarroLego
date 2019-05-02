@@ -1,13 +1,13 @@
-import lejos.hardware.Button;
+import lejos.utility.Delay;
 
 
 public class Veiculo {
-	public Garra g;
+	public Garra garra;
 	public Esteira dir,esq;
 	public SensorToque st;
 	public Veiculo()
 	{
-		g = new Garra();
+		garra = new Garra();
 		dir = new Esteira("R");
 		esq = new Esteira("L");
 		st = new SensorToque();
@@ -25,12 +25,28 @@ public class Veiculo {
 		this.dir.ligaFrente();
 		this.esq.ligaFrente();		
 	}
+	public void setEsteirasForward(int segundos)
+	{
+		this.dir.ligaFrente();
+		this.esq.ligaFrente();	
+		Delay.msDelay(segundos*1000);
+		this.stop();
+	}
+	
 	public void setEsteirasBackward()
 	{
 		this.dir.ligaTras();
 		this.esq.ligaTras();
-
 	}
+	
+	public void setEsteirasBackward(int segundos)
+	{
+		this.dir.ligaTras();
+		this.esq.ligaTras();
+		Delay.msDelay(segundos*1000);
+		this.stop();
+	}
+	
 	public void stop()
 	{
 		this.dir.freia();
@@ -57,27 +73,8 @@ public class Veiculo {
 	{
 		this.dir.closeMotor();
 		this.esq.closeMotor();
-		this.g.closeMotor();
+		this.garra.closeMotor();
 	}
 	
-	
-	
-	public static void main(String[] args) {
-		
-		Veiculo carro = new Veiculo();
-//		EV3LargeRegulatedMotor motorLargo = new EV3LargeRegulatedMotor(MotorPort.C);
-//		motorLargo.setSpeed(360);
-		while(Button.ESCAPE.isUp())
-		{
-//			Button.waitForAnyPress();
-//			carro.g.abre();
-//			Button.waitForAnyPress();
-//			carro.g.fecha();
-			carro.setVelocidadeEsteiras(360);
-			carro.setEsteirasForward();
-//			motorLargo.forward();
-		}
-		
-	}
 
 }
