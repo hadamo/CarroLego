@@ -14,11 +14,11 @@ public class Uso {
 		carro.setEsteirasBackward(5);
 		
 		carro.ev3.beep5();
-		//curva para a direita e depois para a esquerda
-		carro.curvaDireita();
-		carro.stop();
-		carro.curvaEsquerda();
-		carro.stop();
+		//curva para a direita e depois para a esquerda por 2 segundos
+		carro.curvaDireita(2);
+//		carro.stop();
+		carro.curvaEsquerda(2);
+//		carro.stop();
 		
 		//abre garra
 		carro.garra.abre();

@@ -56,15 +56,27 @@ public class Veiculo {
 	}
 	public void curvaDireita()
 	{
-		this.dir.setVelocidade(-50);
-		this.esq.setVelocidade(50);
-		this.setEsteirasForward();
+		this.setVelocidadeEsteiras(360);
+		this.esq.ligaTras();
+		this.dir.ligaFrente();
 	}
 	public void curvaEsquerda()
 	{
-		this.dir.setVelocidade(50);
-		this.esq.setVelocidade(-50);
-		this.setEsteirasForward();
+		this.setVelocidadeEsteiras(360);
+		this.dir.ligaTras();
+		this.esq.ligaFrente();
+	}
+	public void curvaDireita(int segundos)
+	{
+		this.setVelocidadeEsteiras(360);
+		this.esq.ligaTras();
+		this.dir.ligaFrente(segundos);
+	}
+	public void curvaEsquerda(int segundos)
+	{
+		this.setVelocidadeEsteiras(360);
+		this.dir.ligaTras();
+		this.esq.ligaFrente(segundos);
 	}
 
 	/*
