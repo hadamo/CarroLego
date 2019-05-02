@@ -64,13 +64,8 @@ public abstract class Sensor {
 	 */
 	public float getAmostra()
 	{
-		try {
 			this.amostra = this.amostrasRecebidas[0];
 			return this.amostra;
-		} catch (Exception e) {
-			System.err.println("Canal inserido extrapola o permitido para este SENSOR e MODO DE OPERACAO");
-			return -1;
-		}
 	}
 	
 	/**
@@ -81,13 +76,8 @@ public abstract class Sensor {
 	 */
 	public float getAmostra(int canal)
 	{
-		try {
-			this.amostra = this.amostrasRecebidas[canal];
-			return this.amostra;
-		} catch (Exception e) {
-			System.err.println("Canal inserido extrapola o permitido");
-			return -1;
-		}
+		this.amostra = this.amostrasRecebidas[canal];
+		return this.amostra;
 	}
 	
 	public void setAmostra(float valor)

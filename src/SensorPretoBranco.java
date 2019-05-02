@@ -85,10 +85,4 @@ public class SensorPretoBranco extends Sensor {
 		return cor;
 	}
 	
-	
-	
-	/*@Override
-	public void selecionaModoOperacao(int modo) {
-		// TODO Auto-generated method stub
-	}*/
 }
