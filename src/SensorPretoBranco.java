@@ -1,13 +1,15 @@
+import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
 
 public class SensorPretoBranco extends Sensor {
 	private EV3ColorSensor sensor;
 	
-	public SensorPretoBranco()
+	public SensorPretoBranco(Port porta)
 	{
-		super();
-		this.sensor = new EV3ColorSensor(SensorPort.S3);
+		super(porta);
+//		this.sensor = new EV3ColorSensor(SensorPort.S3);
+		this.sensor = new EV3ColorSensor(this.porta);
 		this.setAmostra(-1);
 	}
 
@@ -58,6 +60,7 @@ public class SensorPretoBranco extends Sensor {
 
 	/**
 	 * Metodo que retorna o nome da cor analisada ou se não conseguiu identificar a cor.
+	 * Melhor utilizado para identificar preto e branco por condições locais.
 	 * @return nome da cor : String
 	 */
 	public String getNomeCor()
@@ -85,4 +88,9 @@ public class SensorPretoBranco extends Sensor {
 		return cor;
 	}
 	
+	@Override
+	public void closeSensor() 
+	{
+		this.sensor.close();
+	}
 }

@@ -1,4 +1,4 @@
-
+import lejos.hardware.port.Port;
 
 public class Garra extends MotorMedio{
 	/**
@@ -7,9 +7,9 @@ public class Garra extends MotorMedio{
 	final int anguloAbertura = -75; //Angulo de abertura Total
 	final int anguloFechamento = 75; // Angulo de fechamento Total
 	private boolean aberta = false;	
-	public Garra()
+	public Garra(Port porta)
 	{
-		super();
+		super(porta);
 	}
 	
 	/** abre garra totalmente

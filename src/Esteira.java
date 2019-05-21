@@ -1,3 +1,4 @@
+import lejos.hardware.port.Port;
 import lejos.utility.Delay;
 
 public class Esteira extends MotorLargo{
@@ -6,9 +7,9 @@ public class Esteira extends MotorLargo{
 	 * 
 	 * @param lado : "R" ou "L"
 	 */
-	public Esteira(String lado) 
+	public Esteira(Port porta) 
 	{
-		super(lado);
+		super(porta);
 	}
 	
 	

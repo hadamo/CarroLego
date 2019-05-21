@@ -1,3 +1,4 @@
+import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3IRSensor;
 
@@ -6,10 +7,11 @@ public class SensorInfraVermelho extends Sensor {
 	private int canalPadrao;
 	private int comandoRecebido;
 	private int comandoPadrao;
-	public SensorInfraVermelho()
+	public SensorInfraVermelho(Port porta)
 	{
-		super();
-		this.sensor = new EV3IRSensor(SensorPort.S2);
+		super(porta);
+//		this.sensor = new EV3IRSensor(SensorPort.S2);
+		this.sensor = new EV3IRSensor(this.porta);
 		this.setAmostra(-1);
 		this.canalPadrao = 0;
 		this.comandoRecebido = -1;
@@ -78,7 +80,11 @@ public class SensorInfraVermelho extends Sensor {
 			return this.comandoRecebido;
 		}
 	}
-	
+	@Override
+	public void closeSensor() 
+	{
+		this.sensor.close();
+	}
 	
 	/*@Override
 	public void selecionaModoOperacao(int modo) {

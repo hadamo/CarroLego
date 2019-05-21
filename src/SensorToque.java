@@ -1,3 +1,4 @@
+import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3TouchSensor;
 
@@ -6,10 +7,11 @@ public class SensorToque extends Sensor{
 	private int qtdToques;
 	private float ultimaAmostra;
 	
-	public SensorToque()
+	public SensorToque(Port porta)
 	{
-		super();
-		this.sensor = new EV3TouchSensor(SensorPort.S4);
+		super(porta);
+//		this.sensor = new EV3TouchSensor(SensorPort.S4);
+		this.sensor = new EV3TouchSensor(this.porta);
 		this.qtdToques = 0;
 		this.ultimaAmostra = 0;
 	}
@@ -77,4 +79,10 @@ public class SensorToque extends Sensor{
 	public void selecionaModoOperacao(int modo) {
 		// TODO Auto-generated method stub
 	}*/
+	
+	@Override
+	public void closeSensor() 
+	{
+		this.sensor.close();
+	}
 }

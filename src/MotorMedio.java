@@ -1,11 +1,14 @@
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.Port;
 
 public abstract class MotorMedio extends Motor {
 	public EV3MediumRegulatedMotor motor;
-	public MotorMedio()
+	public MotorMedio(Port porta)
 	{
-		motor = new EV3MediumRegulatedMotor(MotorPort.A);	
+		super(porta);
+//		motor = new EV3MediumRegulatedMotor(MotorPort.A);	
+		motor = new EV3MediumRegulatedMotor(this.porta);	
 	}
 	
 	@Override

@@ -1,3 +1,5 @@
+import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.port.Port;
 import lejos.robotics.SampleProvider;
 
 public abstract class Sensor {
@@ -5,18 +7,20 @@ public abstract class Sensor {
 	private int tamanhoAmostra;
 	private float amostra;
 	public SampleProvider receptorAmostra;
+	public Port porta;
 
 	/**
 	 * Construtor de classe abstrata Sensor<br>
 	 * Apenas inicializa amostra e tamanhoAmostra com 0<br>
 	 * amostrasRecebidas e receptorAmostra com null
 	 */
-	public Sensor()
+	public Sensor(Port porta)
 	{
 		this.amostra = 0;
 		this.amostrasRecebidas = null;
 		this.tamanhoAmostra = 0;
 		this.receptorAmostra = null;
+		this.porta = porta;
 	}
 
 	/**
@@ -90,5 +94,5 @@ public abstract class Sensor {
 	 * @return amostra unica ou multiplas amostras de acordo com SENSOR e MODO DE OPERACAO
 	 */
 	public abstract int coletaAmostra();
-	
+	public abstract void closeSensor();
 }
