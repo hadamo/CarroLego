@@ -1,29 +1,18 @@
-import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3TouchSensor;
 
 public class SensorToque extends Sensor{
 	private EV3TouchSensor sensor;
 	private int qtdToques;
-	private float ultimaAmostra;
 	
-	public SensorToque(Port porta)
+	public SensorToque(int offSet)
 	{
-		super(porta);
-//		this.sensor = new EV3TouchSensor(SensorPort.S4);
-		this.sensor = new EV3TouchSensor(this.porta);
+		super(offSet);
+		this.sensor = new EV3TouchSensor(SensorPort.S4);
 		this.qtdToques = 0;
-		this.ultimaAmostra = 0;
 	}
 
-	public void setUltimaAmostra(float valor)
-	{
-		this.ultimaAmostra = valor;
-	}
-	public float getUltimaAmostra()
-	{
-		return this.ultimaAmostra;
-	}
+	
 	public void resetContadorToques()
 	{
 		this.qtdToques = 0;
@@ -35,50 +24,62 @@ public class SensorToque extends Sensor{
 	@Override
 	/**
 	 * Metodo que faz a coleta de amostra do sensor de toque
+	 * recebe vetor de amostrasRecebidas quando usado com outros sensores<br>
+	 * ao mesmo tempo
 	 * @return 0 para botao nao pressionado, 1 para botao pressionado.
 	 */
+	public int coletaAmostra(float[] amostrasRecebidas) {
+		this.receptorAmostra = sensor.getTouchMode();
+		this.sensor.fetchSample(amostrasRecebidas, this.offset);
+		return (int) amostrasRecebidas[this.offset];
+	}
+	
 	public int coletaAmostra() {
 		this.receptorAmostra = sensor.getTouchMode();
-		this.iniciaVetorAmostras();
-		this.sensor.fetchSample(this.getVetorAmostras(), 0);
-		return (int) this.getAmostra();
+		float []amostras = new float[receptorAmostra.sampleSize()];
+		this.sensor.fetchSample(amostras, 0);
+		return (int) amostras[0];
 	}
 	
 	/**
 	 * Metodo que verifica se o botao esta atualmente pressionado.<br>
 	 * Realiza a coleta de amostra e incrementa o contador de toques caso necessario
+	 * Recebe vetor de amostras quando usado com outros sensores
 	 * @return true para pressionado, false para nao pressionado :boolean
 	 */
-	public boolean isPressionado()
+	public boolean isPressionado(float[] amostrasRecebidas)
 	{
 		boolean resultado = false;
-		this.setUltimaAmostra(this.getAmostra());
-		if(coletaAmostra() > 1) 
+		if(coletaAmostra(amostrasRecebidas) > 0) 
 		{
 			resultado = true;
-		}
-		if(this.getAmostra() > this.ultimaAmostra)
-		{
-			this.qtdToques++;
-		}		
+		}	
 		return resultado;
 	}
 	
 	/**
-	 * Metodo que retorna por quantos segundos
-	 * o botao foi pressionado da ultima vez.
-	 * @return tempo em segundos : int
+	 * Verifica se o botao esta atualmente pressionado
+	 * @return true ou false
 	 */
-/*	public int tempoPressionado()
+	public boolean isPressionado()
 	{
-		
-	}*/
+		boolean resultado = false;
+		if(coletaAmostra() > 0) 
+		{
+			resultado = true;
+		}	
+		return resultado;
+	}
 	
+	public void setReceptor()
+	{
+		this.receptorAmostra = this.sensor.getTouchMode();
+	}
 	
-	/*@Override
-	public void selecionaModoOperacao(int modo) {
-		// TODO Auto-generated method stub
-	}*/
+	public int getTamanhoAmostra()
+	{
+		return this.receptorAmostra.sampleSize();
+	}
 	
 	@Override
 	public void closeSensor() 

@@ -1,4 +1,3 @@
-import lejos.hardware.port.Port;
 
 public abstract class Motor {
 	public final int VELOCIDADEPADRAO_RPS = 360;// rps
@@ -7,13 +6,9 @@ public abstract class Motor {
 	public final double CM_POR_GRAU = 0.03888889;
 	public final int DIAMETRO_RODA_CM = 3;// cm (roda que está ligada ao motor e transmite a força pra esteira?)
 	public final int COMPRIMENTO_ESTEIRA_CM = 30; //cm
-	public Port porta;
 //	public final boolean FRENTE = true;
 //	public final boolean TRAS = false;
-	public Motor(Port porta)
-	{
-		this.porta = porta;
-	}
+
 	
 	
 	/**

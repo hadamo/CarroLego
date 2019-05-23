@@ -1,4 +1,3 @@
-import lejos.hardware.ev3.LocalEV3;
 import lejos.utility.Delay;
 
 
@@ -9,43 +8,21 @@ public class Veiculo {
 	public SensorInfraVermelho iv;
 	public SensorPretoBranco pb;
 	public EV3Cerebro ev3;
+	public float[] amostras;
 	
-	/**
-	 * Strings para identificar as portas, robô atual segue o padrão abaixo:
-	 * Motor esquerdo: B, Motor direito = C
-	 * Garra: A
-	 * Sensor toque: 4, Sensor InfraRed: 3
-	 * Sensor preto e branco: 2
-	 * @param portaMotorEsq
-	 * @param portaMotorDir
-	 * @param portaGarra
-	 * @param portaSensorTq
-	 * @param portaSensorIR
-	 * @param portaSensorPB
-	 */
-	public Veiculo(String portaMotorEsq, String portaMotorDir, String portaGarra, String portaSensorTq,
-			String portaSensorIR,String portaSensorPB )
-	{
-		garra = new Garra(ev3.getPorta(portaGarra));
-		dir = new Esteira(ev3.getPorta(portaMotorDir));
-		esq = new Esteira(ev3.getPorta(portaMotorEsq));
-		tq = new SensorToque(ev3.getPorta(portaSensorTq));
-		iv = new SensorInfraVermelho(ev3.getPorta(portaSensorIR));
-		pb = new SensorPretoBranco(ev3.getPorta(portaSensorPB));
-		ev3 = new EV3Cerebro();
-	}
-	/**
-	 * Construtor com portas já especificadas.
-	 */
+	
 	public Veiculo()
 	{
-		garra = new Garra(ev3.getPorta("A"));
-		dir = new Esteira(ev3.getPorta("C"));
-		esq = new Esteira(ev3.getPorta("B"));
-		tq = new SensorToque(ev3.getPorta("S4"));
-		iv = new SensorInfraVermelho(ev3.getPorta("S3"));
-		pb = new SensorPretoBranco(ev3.getPorta("S2"));
+		garra = new Garra();
+		dir = new Esteira("C");
+		esq = new Esteira("B");
+		tq = new SensorToque(0);
+		pb = new SensorPretoBranco(1);
+		iv = new SensorInfraVermelho(2);
 		ev3 = new EV3Cerebro();
+		pb.setReceptor();
+		tq.setReceptor();
+		amostras = new float[pb.getTamanhoAmostra() + tq.getTamanhoAmostra()];
 	}
 	/**
 	 * seta velocidade de ambas as esteiras para um mesmo valor em rotações por segundo
@@ -162,11 +139,24 @@ public class Veiculo {
 		this.dir.ligaTras();
 		this.esq.ligaFrente(segundos);
 	}
-
-	/*
-	 * public void inverteFrente() { this.dir.closeMotor(); this.esq.closeMotor();
-	 * this.dir = new Esteira("L"); this.esq = new Esteira("R"); }
-	 */
+	public void segueLinha()
+	{
+		this.setEsteirasForward();
+		while(this.pb.isPreto());
+		this.ev3.corLed(7);
+		this.ev3.beep2();
+		this.stop();
+	}
+	
+	public void recuaAteColidir() 
+	{
+		this.setEsteirasBackward();
+		while(!this.tq.isPressionado());
+		this.ev3.corLed(5);
+		this.ev3.beep1();
+		this.stop();
+	}
+	 
 	public void fechaPortas()
 	{
 		this.dir.closeMotor();

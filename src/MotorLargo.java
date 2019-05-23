@@ -4,12 +4,9 @@ import lejos.hardware.port.Port;
 
 public abstract class MotorLargo extends Motor{
 	public EV3LargeRegulatedMotor motorLargo;
-	public MotorLargo(Port porta) {
-		super(porta);
-//			if(lado== "R") this.motorLargo = new EV3LargeRegulatedMotor(MotorPort.C);
-//			else if(lado=="L") this.motorLargo = new EV3LargeRegulatedMotor(MotorPort.B);
-		this.motorLargo = new EV3LargeRegulatedMotor(this.porta);
-		
+	public MotorLargo(String porta) {
+		if(porta == "B") this.motorLargo = new EV3LargeRegulatedMotor(MotorPort.C);
+		else if(porta == "C") this.motorLargo = new EV3LargeRegulatedMotor(MotorPort.B);
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 
 public class Uso {
-
+	
 	public static void main(String[] args) {
 		Veiculo carro =  new Veiculo();
 		//seta velocidade do carro
@@ -24,6 +24,9 @@ public class Uso {
 		carro.garra.abre();
 		carro.setEsteirasForward(1);
 		carro.garra.fecha();
+		
+		carro.recuaAteColidir();
+		carro.segueLinha();
 		
 		carro.fechaPortas();
 		

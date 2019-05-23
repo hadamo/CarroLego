@@ -5,9 +5,9 @@ public class Esteira extends MotorLargo{
 	/**
 	 * Construtor de Esteira
 	 * 
-	 * @param lado : "R" ou "L"
+	 * @param porta : "B" ou "C"
 	 */
-	public Esteira(Port porta) 
+	public Esteira(String porta) 
 	{
 		super(porta);
 	}
@@ -75,7 +75,7 @@ public class Esteira extends MotorLargo{
 		this.motorLargo.stop();
 	}
 	/**
-	 * Motor para de gerar movimento, continua rodando at� parar
+	 * Motor para de gerar movimento, continua rodando ate parar
 	 */
 	public void paraMotor() {
 		// TODO Auto-generated method stub
