@@ -8,11 +8,12 @@ public class SensorPretoBranco extends Sensor {
 	{
 		super(offSet);
 		this.sensor = new EV3ColorSensor(SensorPort.S3);
+		
 		this.setAmostra(-1);
 	}
 
 
-	@Override
+	
 	/**
 	 * Metodo que faz a coleta de amostra do sensor de cor, no modo GetColorId
 	 * @return id de cor, 6 para Branco, 7 para Preto
@@ -22,7 +23,11 @@ public class SensorPretoBranco extends Sensor {
 		this.sensor.fetchSample(amostrasRecebidas, this.offset);
 		return (int) amostrasRecebidas[this.offset];
 	}
-	
+	@Override
+	/**
+	 * Metodo que faz coleta de amostra apenas para este sensor
+	 * @return
+	 */
 	public int coletaAmostra() {
 		this.receptorAmostra = sensor.getColorIDMode();
 		float []amostras = new float[receptorAmostra.sampleSize()];
@@ -155,11 +160,6 @@ public class SensorPretoBranco extends Sensor {
 			default: cor ="Nao sei a cor!";
 		}
 		return cor;
-	}
-	
-	public void setReceptor()
-	{
-		this.receptorAmostra = this.sensor.getColorIDMode();
 	}
 	
 	public int getTamanhoAmostra()

@@ -52,6 +52,23 @@ public class SensorInfraVermelho extends Sensor {
 		return this.comandoPadrao;
 	}
 
+
+	/**
+	 * Metodo que recebe o comando do CONTROLE REMOTO pelo sensor INFRAVERMELHO,<br>
+	 * Apenas para o canal atualmente definido como Padrao.
+	 * Guarda comando no vetor de amostras recebidas
+	 * Comandos:<br>
+	 * 1 TOP-LEFT<br> 2 BOTTOM-LEFT<br>3 TOP-RIGHT<br>4 BOTTOM-RIGHT<br>5 TOP-LEFT + TOP-RIGHT<br>
+	 * 6 TOP-LEFT + BOTTOM-RIGHT<br>7 BOTTOM-LEFT + TOP-RIGHT<br>8 BOTTOM-LEFT + BOTTOM-RIGHT<br>
+	 * 9 CENTRE/BEACON<br>10 BOTTOM-LEFT + TOP-LEFT<br>11 TOP-RIGHT + BOTTOM-RIGHT
+	 * @param amostrasRecebidas vetor de amostras para multiplos sensores
+	 * @return numero do botao (ou combinacao de botoes) : int
+	 */
+	public int coletaAmostra(float[] amostrasRecebidas) {
+		this.comandoRecebido = sensor.getRemoteCommand(this.canalPadrao);
+		amostrasRecebidas[this.offset] = this.comandoRecebido;
+		return this.comandoRecebido;
+	}
 	@Override
 	/**
 	 * Metodo que recebe o comando do CONTROLE REMOTO pelo sensor INFRAVERMELHO,<br>
@@ -61,16 +78,21 @@ public class SensorInfraVermelho extends Sensor {
 	 * 6 TOP-LEFT + BOTTOM-RIGHT<br>7 BOTTOM-LEFT + TOP-RIGHT<br>8 BOTTOM-LEFT + BOTTOM-RIGHT<br>
 	 * 9 CENTRE/BEACON<br>10 BOTTOM-LEFT + TOP-LEFT<br>11 TOP-RIGHT + BOTTOM-RIGHT
 	 * @return numero do botao (ou combinacao de botoes) : int
-	 */
-	public int coletaAmostra(float[] amostrasRecebidas) {
-		this.comandoRecebido = sensor.getRemoteCommand(this.canalPadrao);
-		return this.comandoRecebido;
-	}
+	 */	
 	public int coletaAmostra() {
 		this.comandoRecebido = sensor.getRemoteCommand(this.canalPadrao);
 		return this.comandoRecebido;
 	}
-	
+	/**
+	 * Metodo que recebe o comando do CONTROLE REMOTO pelo sensor INFRAVERMELHO,<br>
+	 * Apenas para o canal atualmente definido como Padrao.
+	 * Comandos:<br>
+	 * 1 TOP-LEFT<br> 2 BOTTOM-LEFT<br>3 TOP-RIGHT<br>4 BOTTOM-RIGHT<br>5 TOP-LEFT + TOP-RIGHT<br>
+	 * 6 TOP-LEFT + BOTTOM-RIGHT<br>7 BOTTOM-LEFT + TOP-RIGHT<br>8 BOTTOM-LEFT + BOTTOM-RIGHT<br>
+	 * 9 CENTRE/BEACON<br>10 BOTTOM-LEFT + TOP-LEFT<br>11 TOP-RIGHT + BOTTOM-RIGHT
+	 * @param canal canal selecionado no controle remoto entre 0 e 3 <br> OBS: no controle informa entre 1 e 4
+	 * @return numero do botao (ou combinacao de botoes) : int
+	 */
 	public int coletaAmostra(int canal) {
 		if(canal < 0 || canal >3)
 		{

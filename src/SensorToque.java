@@ -21,7 +21,7 @@ public class SensorToque extends Sensor{
 	{
 		return this.qtdToques;
 	}
-	@Override
+	
 	/**
 	 * Metodo que faz a coleta de amostra do sensor de toque
 	 * recebe vetor de amostrasRecebidas quando usado com outros sensores<br>
@@ -33,7 +33,11 @@ public class SensorToque extends Sensor{
 		this.sensor.fetchSample(amostrasRecebidas, this.offset);
 		return (int) amostrasRecebidas[this.offset];
 	}
-	
+	@Override
+	/**
+	 * Metodo que faz a coleta de amostra do sensor de toque
+	 * @return 0 para botao nao pressionado, 1 para botao pressionado.
+	 */
 	public int coletaAmostra() {
 		this.receptorAmostra = sensor.getTouchMode();
 		float []amostras = new float[receptorAmostra.sampleSize()];
@@ -69,11 +73,6 @@ public class SensorToque extends Sensor{
 			resultado = true;
 		}	
 		return resultado;
-	}
-	
-	public void setReceptor()
-	{
-		this.receptorAmostra = this.sensor.getTouchMode();
 	}
 	
 	public int getTamanhoAmostra()

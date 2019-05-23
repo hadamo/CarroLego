@@ -4,6 +4,7 @@ import lejos.robotics.SampleProvider;
 public abstract class Sensor {
 	protected int amostra;
 	protected int offset;
+	protected int sizeAmostra;
 	public SampleProvider receptorAmostra;
 
 	/**
@@ -43,6 +44,6 @@ public abstract class Sensor {
 	 * Metodo que faz a coleta de amostra, de acordo com SENSOR e MODO DE OPERACAO
 	 * @return amostra unica ou multiplas amostras de acordo com SENSOR e MODO DE OPERACAO
 	 */
-	public abstract int coletaAmostra(float[] amostrasRecebidas);
+	public abstract int coletaAmostra();
 	public abstract void closeSensor();
 }

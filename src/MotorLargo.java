@@ -1,6 +1,5 @@
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
-import lejos.hardware.port.Port;
 
 public abstract class MotorLargo extends Motor{
 	public EV3LargeRegulatedMotor motorLargo;
