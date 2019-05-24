@@ -6,9 +6,9 @@ public class Uso {
 	public static void main(String[] args) {
 		Veiculo carro =  new Veiculo(true, true, true);
 		//seta velocidade do carro
-		//carro.setVelocidadeEsteiras(360);
+		carro.setVelocidadeEsteiras(360);
 		//anda pra frente por 5s
-		//carro.setEsteirasForward(5);
+		carro.setEsteirasForward(5);
 		//toca um som
 		//carro.ev3.beep1();
 
@@ -28,14 +28,15 @@ public class Uso {
 		//carro.garra.fecha();
 		
 		//carro.recuaAteColidir();
+		//carro.setVelocidadeEsteiras(300);
 		//carro.segueLinha();
-		while(Button.ESCAPE.isUp())
+		/*while(Button.ESCAPE.isUp())
 		{
 			System.out.println(carro.iv.coletaAmostra());
 			System.out.println(carro.tq.coletaAmostra(carro.amostras));
 			System.out.println(carro.pb.coletaAmostra(carro.amostras));
 			
-		}
+		}*/
 		carro.ev3.corLed(4);
 		carro.fechaPortas();
 		

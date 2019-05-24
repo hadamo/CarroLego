@@ -20,9 +20,9 @@ public class Veiculo {
 	 */
 	public Veiculo(boolean toque, boolean pretobranco, boolean infravermelho)
 	{
-		//garra = new Garra();
-		//dir = new Esteira("C");
-		//esq = new Esteira("B");
+		garra = new Garra();
+		dir = new Esteira("C");
+		esq = new Esteira("B");
 		int numSensoresAtivos=0;
 		if(toque) 
 		{
@@ -44,6 +44,10 @@ public class Veiculo {
 		}
 		ev3 = new EV3Cerebro();
 		amostras = new float[numSensoresAtivos];
+		dir.sincronizarCom(esq);
+		esq.sincronizarCom(dir);
+		
+	
 	}
 	/**
 	 * Constroi veiculo e ativa todos os 3 sensores
@@ -58,6 +62,8 @@ public class Veiculo {
 		iv = new SensorInfraVermelho(2);
 		ev3 = new EV3Cerebro();
 		amostras = new float[3];
+		dir.sincronizarCom(esq);
+		esq.sincronizarCom(dir);
 	}
 	
 	
@@ -79,8 +85,8 @@ public class Veiculo {
 	 */
 	public void setEsteirasForward()
 	{
-		this.dir.ligaFrente();
-		this.esq.ligaFrente();		
+		this.dir.ligaFrente(true);
+//		this.esq.ligaFrente();		
 	}
 	
 	
@@ -91,8 +97,8 @@ public class Veiculo {
 	 */
 	public void setEsteirasForward(int segundos)
 	{
-		this.dir.ligaFrente();
-		this.esq.ligaFrente();	
+		this.dir.ligaFrente(true);
+//		this.esq.ligaFrente();	
 		Delay.msDelay(segundos*1000);
 		this.stop();
 	}
@@ -107,8 +113,8 @@ public class Veiculo {
 	public void setEsteirasForward(int segundos, int rps)
 	{
 		this.setVelocidadeEsteiras(rps);
-		this.dir.ligaFrente();
-		this.esq.ligaFrente();	
+		this.dir.ligaFrente(true);
+//		this.esq.ligaFrente();	
 		Delay.msDelay(segundos*1000);
 		this.stop();
 	}
@@ -121,8 +127,8 @@ public class Veiculo {
 	 */
 	public void setEsteirasBackward()
 	{
-		this.dir.ligaTras();
-		this.esq.ligaTras();
+		this.dir.ligaTras(true);
+//		this.esq.ligaTras();
 	}
 	
 	
@@ -133,8 +139,8 @@ public class Veiculo {
 	 */
 	public void setEsteirasBackward(int segundos)
 	{
-		this.dir.ligaTras();
-		this.esq.ligaTras();
+		this.dir.ligaTras(true);
+//		this.esq.ligaTras();
 		Delay.msDelay(segundos*1000);
 		this.stop();
 	}
@@ -149,20 +155,19 @@ public class Veiculo {
 	public void setEsteirasBackward(int segundos, int rps)
 	{
 		this.setVelocidadeEsteiras(rps);
-		this.dir.ligaTras();
-		this.esq.ligaTras();
+		this.dir.ligaTras(true);
+//		this.esq.ligaTras();
 		Delay.msDelay(segundos*1000);
 		this.stop();
 	}
 	
 	
 	/**
-	 * para os motores da esteira
+	 * para os motores da esteira de forma sincronizada
 	 */
 	public void stop()
 	{
-		this.dir.freia();
-		this.esq.freia();
+		this.dir.freia(true);
 	}
 	
 	
@@ -172,8 +177,8 @@ public class Veiculo {
 	public void curvaDireita()
 	{
 		this.setVelocidadeEsteiras(360);
-		this.esq.ligaTras();
-		this.dir.ligaFrente();
+		this.esq.ligaTras(false);
+		this.dir.ligaFrente(false);
 	}
 	
 	
@@ -183,8 +188,8 @@ public class Veiculo {
 	public void curvaEsquerda()
 	{
 		this.setVelocidadeEsteiras(360);
-		this.dir.ligaTras();
-		this.esq.ligaFrente();
+		this.dir.ligaTras(false);
+		this.esq.ligaFrente(false);
 	}
 	
 	
@@ -194,9 +199,9 @@ public class Veiculo {
 	 */
 	public void curvaDireita(int segundos)
 	{
-		this.setVelocidadeEsteiras(360);
-		this.esq.ligaTras();
-		this.dir.ligaFrente(segundos);
+		this.setVelocidadeEsteiras(dir.VELOCIDADEPADRAO_RPS);
+		this.esq.ligaTras(false);
+		this.dir.ligaFrente(segundos,false);
 	}
 	
 	
@@ -206,9 +211,9 @@ public class Veiculo {
 	 */
 	public void curvaEsquerda(int segundos)
 	{
-		this.setVelocidadeEsteiras(360);
-		this.dir.ligaTras();
-		this.esq.ligaFrente(segundos);
+		this.setVelocidadeEsteiras(dir.VELOCIDADEPADRAO_RPS);
+		this.dir.ligaTras(false);
+		this.esq.ligaFrente(segundos,false);
 	}
 	
 	
