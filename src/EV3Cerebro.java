@@ -13,6 +13,11 @@ public class EV3Cerebro{
 			Delay.msDelay(segundos*1000);
 		}
 		
+		public void esperaMiliSegundos(int ms)
+		{
+			Delay.msDelay(ms);
+		}
+		
 		public void beep1()
 		{
 			Sound.beepSequenceUp();

@@ -1,12 +1,12 @@
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3IRSensor;
 
-public class SensorInfraVermelho extends Sensor {
+public class SensorInfravermelho extends Sensor {
 	private EV3IRSensor sensor;
 	private int canalPadrao;
 	private int comandoRecebido;
 	private int comandoPadrao;
-	public SensorInfraVermelho(int offSet)
+	public SensorInfravermelho(int offSet)
 	{
 		super(offSet);
 		this.sensor = new EV3IRSensor(SensorPort.S2);

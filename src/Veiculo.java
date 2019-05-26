@@ -5,11 +5,12 @@ public class Veiculo {
 	public Garra garra;
 	public Esteira dir,esq;
 	public SensorToque tq;
-	public SensorInfraVermelho iv;
+	public SensorInfravermelho iv;
 	public SensorPretoBranco pb;
 	public EV3Cerebro ev3;
 	public boolean toqueIsAtivo, pbIsAtivo, infravermIsAtivo;
 	public float[] amostras;
+	public static int delayEntreMotores = 100;
 	
 	/**
 	 * construtor de veiculo definindo quais sensores <br>
@@ -39,7 +40,7 @@ public class Veiculo {
 		if(infravermelho) 
 		{
 			infravermIsAtivo = true;
-			iv = new SensorInfraVermelho(--numSensoresAtivos);
+			iv = new SensorInfravermelho(--numSensoresAtivos);
 			numSensoresAtivos ++;
 		}
 		ev3 = new EV3Cerebro();
@@ -55,7 +56,7 @@ public class Veiculo {
 		esq = new Esteira("B");
 		tq = new SensorToque(0);
 		pb = new SensorPretoBranco(1);
-		iv = new SensorInfraVermelho(2);
+		iv = new SensorInfravermelho(2);
 		ev3 = new EV3Cerebro();
 		amostras = new float[3];
 	}
@@ -80,6 +81,7 @@ public class Veiculo {
 	public void setEsteirasForward()
 	{
 		this.dir.ligaFrente();
+		ev3.esperaMiliSegundos(delayEntreMotores);
 		this.esq.ligaFrente();		
 	}
 	
@@ -92,6 +94,7 @@ public class Veiculo {
 	public void setEsteirasForward(int segundos)
 	{
 		this.dir.ligaFrente();
+		ev3.esperaMiliSegundos(delayEntreMotores);
 		this.esq.ligaFrente();	
 		Delay.msDelay(segundos*1000);
 		this.stop();
@@ -108,6 +111,7 @@ public class Veiculo {
 	{
 		this.setVelocidadeEsteiras(rps);
 		this.dir.ligaFrente();
+		ev3.esperaMiliSegundos(delayEntreMotores);
 		this.esq.ligaFrente();	
 		Delay.msDelay(segundos*1000);
 		this.stop();
@@ -122,6 +126,7 @@ public class Veiculo {
 	public void setEsteirasBackward()
 	{
 		this.dir.ligaTras();
+		ev3.esperaMiliSegundos(delayEntreMotores);
 		this.esq.ligaTras();
 	}
 	
@@ -134,6 +139,7 @@ public class Veiculo {
 	public void setEsteirasBackward(int segundos)
 	{
 		this.dir.ligaTras();
+		ev3.esperaMiliSegundos(delayEntreMotores);
 		this.esq.ligaTras();
 		Delay.msDelay(segundos*1000);
 		this.stop();
@@ -150,6 +156,7 @@ public class Veiculo {
 	{
 		this.setVelocidadeEsteiras(rps);
 		this.dir.ligaTras();
+		this.ev3.esperaMiliSegundos(delayEntreMotores);
 		this.esq.ligaTras();
 		Delay.msDelay(segundos*1000);
 		this.stop();
@@ -162,6 +169,7 @@ public class Veiculo {
 	public void stop()
 	{
 		this.dir.freia();
+		ev3.esperaMiliSegundos(delayEntreMotores);
 		this.esq.freia();
 	}
 	
