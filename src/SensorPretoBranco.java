@@ -8,8 +8,7 @@ public class SensorPretoBranco extends Sensor {
 	{
 		super(offSet);
 		this.sensor = new EV3ColorSensor(SensorPort.S3);
-		
-		this.setAmostra(-1);
+		this.setAmostra(-1);  
 	}
 
 
