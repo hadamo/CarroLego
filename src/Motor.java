@@ -4,26 +4,25 @@ public abstract class Motor {
 	public final int TEMPOPADRAO = 1000; //milisegundos
 	public final double GRAU_POR_CM = 25.7142857; 
 	public final double CM_POR_GRAU = 0.03888889;
+	public final float RPS_TO_GPS = 360;
 	public final int DIAMETRO_RODA_CM = 3;// cm (roda que está ligada ao motor e transmite a força pra esteira?)
 	public final int COMPRIMENTO_ESTEIRA_CM = 30; //cm
-//	public final boolean FRENTE = true;
-//	public final boolean TRAS = false;
 
 	
+	/**
+	 * Define velocidade em rotacao por segundo<br>
+	 * *OBS1: velocidade max em superficie plana eh 100 * voltagem atual da bateria
+	 * *OBS2: eh feita conversao para grau por segundo dentro do metodo
+	 * @param gps : float graus por segundo
+	 */
+	public abstract void setVelocidadeRps(float rps);
 	
 	/**
-	 * Define velocidade em rotacoes por segundo<br>
+	 * Define velocidade em grau por segundo<br>
 	 * *OBS: velocidade max em superficie plana eh 100 * voltagem atual da bateria
-	 * @param rps : int
+	 * @param gps : float graus por segundo
 	 */
-	public abstract void setVelocidade(int rps);
-	
-	/**
-	 * Define velocidade em rotacoes por segundo<br>
-	 * *OBS: velocidade max em superficie plana eh 100 * voltagem atual da bateria
-	 * @param rps : float
-	 */
-	public abstract void setVelocidade(float rps);
+	public abstract void setVelocidadeGps(float gps);
 	
 	/**
 	 * @return velocidade maxima com a bateria atual em graus por segundo (GPS)

@@ -1,7 +1,7 @@
 
 public class Garra extends MotorMedio{
 	/**
-	 * angulo necessario para abrir totalmente eh -70 e 70 para fechar totalmente
+	 * angulo necessario para abrir totalmente eh -60 e 60 para fechar totalmente
 	 */
 	final int anguloAbertura = -60; //Angulo de abertura Total
 	final int anguloFechamento = 60; // Angulo de fechamento Total
@@ -52,7 +52,7 @@ public class Garra extends MotorMedio{
 	}
 	
 	/**
-	 * verifica se a garra encontra-se aberta
+	 * verifica se a garra esta aberta
 	 * @return
 	 */
 	public boolean isAberta()

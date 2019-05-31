@@ -9,7 +9,7 @@ public class SensorInfravermelho extends Sensor {
 	private int modoOperativo;
 	/**
 	 * construtor padrao de sensor infravermelho<br>
-	 * Modo operativo: receptor de controle<br>
+	 * Modo operativo padrao: receptor de controle<br>
 	 * Para mudar utilizar comando setModoOperativo(int)
 	 * @param offSet
 	 */
@@ -69,6 +69,7 @@ public class SensorInfravermelho extends Sensor {
 	 * Set comando Padrão para controle remoto, deve ser<br>
 	 * valor no intervalo [1,11].<br>
 	 * Comandos:<br>
+	 * 0 nenhum comando ou comando nao reconhecido<br>
 	 * 1 TOP-LEFT<br> 2 BOTTOM-LEFT<br>3 TOP-RIGHT<br>4 BOTTOM-RIGHT<br>5 TOP-LEFT + TOP-RIGHT<br>
 	 * 6 TOP-LEFT + BOTTOM-RIGHT<br>7 BOTTOM-LEFT + TOP-RIGHT<br>8 BOTTOM-LEFT + BOTTOM-RIGHT<br>
 	 * 9 CENTRE/BEACON<br>10 BOTTOM-LEFT + TOP-LEFT<br>11 TOP-RIGHT + BOTTOM-RIGHT
@@ -85,19 +86,22 @@ public class SensorInfravermelho extends Sensor {
 		return this.comandoPadrao;
 	}
 
-
+	@Override 
 	/**
 	 * Metodo que recebe amostras do sensor em 2 modos diferentes.
+	 * Modo de operacao eh mantido em atributo e pode ser alternado com <br> metodo setModoOperativo(int)
 	 * 1 - Para modo de receptor de controle <br>o comando do CONTROLE REMOTO pelo sensor INFRAVERMELHO,<br>
 	 * Apenas para o canal atualmente definido como Padrao.
 	 * Guarda comando no vetor de amostras recebidas
 	 * Comandos:<br>
+	 * 0 nenhum comando ou comando nao reconhecido<br>
 	 * 1 TOP-LEFT<br> 2 BOTTOM-LEFT<br>3 TOP-RIGHT<br>4 BOTTOM-RIGHT<br>5 TOP-LEFT + TOP-RIGHT<br>
 	 * 6 TOP-LEFT + BOTTOM-RIGHT<br>7 BOTTOM-LEFT + TOP-RIGHT<br>8 BOTTOM-LEFT + BOTTOM-RIGHT<br>
 	 * 9 CENTRE/BEACON<br>10 BOTTOM-LEFT + TOP-LEFT<br>11 TOP-RIGHT + BOTTOM-RIGHT<br><br>
 	 * 
 	 * 2 - Para modo de detector de distancia
-	 * @param amostrasRecebidas vetor de amostras para multiplos sensores
+	 * 
+	 * @param amostrasRecebidas : float[] vetor que recebe as amostras <br> compartilhadas entre 1 ou mais sensores.
 	 * @return numero do botao (ou combinacao de botoes) : int
 	 */
 	public int coletaAmostra(float[] amostrasRecebidas) {
@@ -113,46 +117,29 @@ public class SensorInfravermelho extends Sensor {
 			return (int) amostrasRecebidas[this.offset];
 		}
 	}
-	@Override
-	/**
-	 * 1 - Para modo de receptor de controle <br>o comando do CONTROLE REMOTO pelo sensor INFRAVERMELHO,<br>
-	 * Apenas para o canal atualmente definido como Padrao.
-	 * Comandos:<br>
-	 * 1 TOP-LEFT<br> 2 BOTTOM-LEFT<br>3 TOP-RIGHT<br>4 BOTTOM-RIGHT<br>5 TOP-LEFT + TOP-RIGHT<br>
-	 * 6 TOP-LEFT + BOTTOM-RIGHT<br>7 BOTTOM-LEFT + TOP-RIGHT<br>8 BOTTOM-LEFT + BOTTOM-RIGHT<br>
-	 * 9 CENTRE/BEACON<br>10 BOTTOM-LEFT + TOP-LEFT<br>11 TOP-RIGHT + BOTTOM-RIGHT <br><br>
-	 * 
-	 * 2 - Para modo de detector de distancia
-	 * @return numero do botao (ou combinacao de botoes) : int modo controle
-	 * @return distancia do sensor a algum objeto/supericie em cm : int modo distancia <br>
-	 * se retorno for = 2147483647, o alvo esta fora do limite do sensor ( +-50cm)
-	 */	
-	public int coletaAmostra() {
-
-		if(this.modoOperativo == 1)
-		{
-			this.comandoRecebido = sensor.getRemoteCommand(this.canalControle);
-			return this.comandoRecebido;
-		}else
-		{
-			this.receptorAmostra = sensor.getDistanceMode();
-			float []amostras = new float[receptorAmostra.sampleSize()];
-			this.sensor.fetchSample(amostras, 0);
-			return (int) amostras[0];
-		}
-	}
 	
-	public int getComandoControle()
+	/**
+	 * Metodo que coleta o comando do controle remoto
+	 * OBS1: ele automaticamente muda o modo de operacao para receptor de controle
+	 * @param amostrasRecebidas : float[] vetor que recebe as amostras <br> compartilhadas entre 1 ou mais sensores.
+	 * @return comando : int
+	 */
+	public int getComandoControle(float[] amostrasRecebidas)
 	{
 		this.modoOperativo = 1;
-		this.comandoRecebido = coletaAmostra();
+		this.comandoRecebido = coletaAmostra(amostrasRecebidas);
 		return this.comandoRecebido;
 	}
 	
-	public int getDistancia()
+	/**
+	 * Metodo que coleta a distancia de algum objeto ou superficie do sensor infravermelho.
+	 * @param amostrasRecebidas : float[] vetor que recebe as amostras <br> compartilhadas entre 1 ou mais sensores.
+	 * @return distancia : int em cm
+	 */
+	public int getDistancia(float[] amostrasRecebidas)
 	{
 		this.modoOperativo = 2;
-		return coletaAmostra();
+		return coletaAmostra(amostrasRecebidas);
 	}
 	
 	@Override
@@ -160,9 +147,4 @@ public class SensorInfravermelho extends Sensor {
 	{
 		this.sensor.close();
 	}
-	
-	/*@Override
-	public void selecionaModoOperacao(int modo) {
-		// TODO Auto-generated method stub
-	}*/
 }

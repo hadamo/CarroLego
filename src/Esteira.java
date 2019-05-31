@@ -1,4 +1,3 @@
-import lejos.hardware.port.Port;
 import lejos.utility.Delay;
 
 public class Esteira extends MotorLargo{
@@ -18,7 +17,6 @@ public class Esteira extends MotorLargo{
 		// faz roda rotacionar at� angulo e libera processamento.
 		this.motorLargo.rotateTo(angulo, true);
 	}
-//	public void 
 
 	
 	public void ligaFrente() {
@@ -73,6 +71,7 @@ public class Esteira extends MotorLargo{
 	public void freia() {
 		// TODO Auto-generated method stub
 		this.motorLargo.stop();
+		System.out.println("freiou este motor");
 	}
 	/**
 	 * Motor para de gerar movimento, continua rodando ate parar

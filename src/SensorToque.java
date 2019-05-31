@@ -12,43 +12,43 @@ public class SensorToque extends Sensor{
 		this.qtdToques = 0;
 	}
 
-	
+	/**
+	 * Reseta o contador de toques
+	 */
 	public void resetContadorToques()
 	{
 		this.qtdToques = 0;
 	}
+	
+	/**
+	 * Metodo que informa quantas vezes foi detectado toque <br> a cada chamada de coletaAmostra
+	 * @return qtdToques : int
+	 */
 	public int getQtdToques() 
 	{
 		return this.qtdToques;
 	}
 	
+	@Override
 	/**
 	 * Metodo que faz a coleta de amostra do sensor de toque
 	 * recebe vetor de amostrasRecebidas quando usado com outros sensores<br>
 	 * ao mesmo tempo
+	 * @param amostrasRecebidas : float[] vetor que recebe as amostras <br> compartilhadas entre 1 ou mais sensores.
 	 * @return 0 para botao nao pressionado, 1 para botao pressionado.
 	 */
 	public int coletaAmostra(float[] amostrasRecebidas) {
 		this.receptorAmostra = sensor.getTouchMode();
 		this.sensor.fetchSample(amostrasRecebidas, this.offset);
+		if(amostrasRecebidas[this.offset]>0) this.qtdToques++;
 		return (int) amostrasRecebidas[this.offset];
-	}
-	@Override
-	/**
-	 * Metodo que faz a coleta de amostra do sensor de toque
-	 * @return 0 para botao nao pressionado, 1 para botao pressionado.
-	 */
-	public int coletaAmostra() {
-		this.receptorAmostra = sensor.getTouchMode();
-		float []amostras = new float[receptorAmostra.sampleSize()];
-		this.sensor.fetchSample(amostras, 0);
-		return (int) amostras[0];
 	}
 	
 	/**
 	 * Metodo que verifica se o botao esta atualmente pressionado.<br>
 	 * Realiza a coleta de amostra e incrementa o contador de toques caso necessario
 	 * Recebe vetor de amostras quando usado com outros sensores
+	 * @param amostrasRecebidas : float[] vetor que recebe as amostras <br> compartilhadas entre 1 ou mais sensores.
 	 * @return true para pressionado, false para nao pressionado :boolean
 	 */
 	public boolean isPressionado(float[] amostrasRecebidas)
@@ -61,24 +61,6 @@ public class SensorToque extends Sensor{
 		return resultado;
 	}
 	
-	/**
-	 * Verifica se o botao esta atualmente pressionado
-	 * @return true ou false
-	 */
-	public boolean isPressionado()
-	{
-		boolean resultado = false;
-		if(coletaAmostra() > 0) 
-		{
-			resultado = true;
-		}	
-		return resultado;
-	}
-	
-	public int getTamanhoAmostra()
-	{
-		return this.receptorAmostra.sampleSize();
-	}
 	
 	@Override
 	public void closeSensor() 

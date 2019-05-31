@@ -26,7 +26,7 @@ public abstract class Sensor {
 		return this.offset;
 	}
 	
-	public void setOffset(int newOffset)
+	public void changeOffset(int newOffset)
 	{
 		this.offset = newOffset;
 	}
@@ -44,6 +44,6 @@ public abstract class Sensor {
 	 * Metodo que faz a coleta de amostra, de acordo com SENSOR e MODO DE OPERACAO
 	 * @return amostra unica ou multiplas amostras de acordo com SENSOR e MODO DE OPERACAO
 	 */
-	public abstract int coletaAmostra();
+	public abstract int coletaAmostra(float[] amostrasRecebidas);
 	public abstract void closeSensor();
 }

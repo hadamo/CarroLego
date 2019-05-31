@@ -13,7 +13,7 @@ public class EV3Cerebro{
 			Delay.msDelay(segundos*1000);
 		}
 		
-		public void esperaMiliSegundos(int ms)
+		public void esperaMilissegundos(int ms)
 		{
 			Delay.msDelay(ms);
 		}

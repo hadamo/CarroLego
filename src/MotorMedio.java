@@ -17,13 +17,13 @@ public abstract class MotorMedio extends Motor {
 	
 
 	@Override
-	public void setVelocidade(int rps) {
+	public void setVelocidadeRps(float rps) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void setVelocidade(float rps) {
+	public void setVelocidadeGps(float rps) {
 		// TODO Auto-generated method stub
 		
 	}

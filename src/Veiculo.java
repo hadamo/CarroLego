@@ -9,22 +9,22 @@ public class Veiculo {
 	public SensorPretoBranco pb;
 	public EV3Cerebro ev3;
 	public boolean toqueIsAtivo, pbIsAtivo, infravermIsAtivo;
+	private int numSensoresAtivos = 0;
 	public float[] amostras;
 	public static int delayEntreMotores = 100;
 	
 	/**
 	 * construtor de veiculo definindo quais sensores <br>
-	 * estarao ativos
-	 * @param toque ativa sensor de toque
-	 * @param pretobranco ativa sensor preto e branco
-	 * @param infravermelho ativa sensor infravermelho
+	 * serao ativados
+	 * @param toque : boolean ativa sensor de toque
+	 * @param pretobranco : boolean ativa sensor preto e branco
+	 * @param infravermelho : boolean ativa sensor infravermelho
 	 */
 	public Veiculo(boolean toque, boolean pretobranco, boolean infravermelho)
 	{
-		//garra = new Garra();
-		//dir = new Esteira("C");
-		//esq = new Esteira("B");
-		int numSensoresAtivos=0;
+		garra = new Garra();
+		dir = new Esteira("C");
+		esq = new Esteira("B");
 		if(toque) 
 		{
 			toqueIsAtivo = true;
@@ -66,10 +66,20 @@ public class Veiculo {
 	 * seta velocidade de ambas as esteiras para um mesmo valor em rotações por segundo
 	 * @param rps
 	 */
-	public void setVelocidadeEsteiras(int rps)
+	public void setVelocidadeEsteirasRotacao(float rps)
 	{
-		this.dir.setVelocidade(rps);
-		this.esq.setVelocidade(rps);
+		this.dir.setVelocidadeRps(rps);
+		this.esq.setVelocidadeRps(rps);
+	}
+	
+	/**
+	 * seta velocidade de ambas as esteiras para um mesmo valor em rotações por segundo
+	 * @param rps
+	 */
+	public void setVelocidadeEsteirasGrau(float gps)
+	{
+		this.dir.setVelocidadeGps(gps);
+		this.esq.setVelocidadeGps(gps);
 	}
 	
 
@@ -81,7 +91,7 @@ public class Veiculo {
 	public void setEsteirasForward()
 	{
 		this.dir.ligaFrente();
-		ev3.esperaMiliSegundos(delayEntreMotores);
+		ev3.esperaMilissegundos(delayEntreMotores);
 		this.esq.ligaFrente();		
 	}
 	
@@ -94,7 +104,6 @@ public class Veiculo {
 	public void setEsteirasForward(int segundos)
 	{
 		this.dir.ligaFrente();
-		ev3.esperaMiliSegundos(delayEntreMotores);
 		this.esq.ligaFrente();	
 		Delay.msDelay(segundos*1000);
 		this.stop();
@@ -107,11 +116,10 @@ public class Veiculo {
 	 * @param segundos
 	 * @param rps
 	 */
-	public void setEsteirasForward(int segundos, int rps)
+	public void setEsteirasForward(int segundos, float rps)
 	{
-		this.setVelocidadeEsteiras(rps);
+		this.setVelocidadeEsteirasRotacao(rps);
 		this.dir.ligaFrente();
-		ev3.esperaMiliSegundos(delayEntreMotores);
 		this.esq.ligaFrente();	
 		Delay.msDelay(segundos*1000);
 		this.stop();
@@ -126,7 +134,6 @@ public class Veiculo {
 	public void setEsteirasBackward()
 	{
 		this.dir.ligaTras();
-		ev3.esperaMiliSegundos(delayEntreMotores);
 		this.esq.ligaTras();
 	}
 	
@@ -139,8 +146,9 @@ public class Veiculo {
 	public void setEsteirasBackward(int segundos)
 	{
 		this.dir.ligaTras();
-		ev3.esperaMiliSegundos(delayEntreMotores);
 		this.esq.ligaTras();
+		System.out.println(this.dir.getTacometro());
+		System.out.println(this.esq.getTacometro());
 		Delay.msDelay(segundos*1000);
 		this.stop();
 	}
@@ -152,11 +160,11 @@ public class Veiculo {
 	 * @param segundos
 	 * @param rps
 	 */
-	public void setEsteirasBackward(int segundos, int rps)
+	public void setEsteirasBackward(int segundos, float rps)
 	{
-		this.setVelocidadeEsteiras(rps);
+		this.setVelocidadeEsteirasRotacao(rps);
 		this.dir.ligaTras();
-		this.ev3.esperaMiliSegundos(delayEntreMotores);
+		this.ev3.esperaMilissegundos(delayEntreMotores);
 		this.esq.ligaTras();
 		Delay.msDelay(segundos*1000);
 		this.stop();
@@ -168,9 +176,8 @@ public class Veiculo {
 	 */
 	public void stop()
 	{
-		this.dir.freia();
-		ev3.esperaMiliSegundos(delayEntreMotores);
 		this.esq.freia();
+		this.dir.freia();
 	}
 	
 	
@@ -179,7 +186,7 @@ public class Veiculo {
 	 */
 	public void curvaDireita()
 	{
-		this.setVelocidadeEsteiras(360);
+		this.setVelocidadeEsteirasGrau(360);
 		this.esq.ligaTras();
 		this.dir.ligaFrente();
 	}
@@ -190,7 +197,7 @@ public class Veiculo {
 	 */
 	public void curvaEsquerda()
 	{
-		this.setVelocidadeEsteiras(360);
+		this.setVelocidadeEsteirasGrau(360);
 		this.dir.ligaTras();
 		this.esq.ligaFrente();
 	}
@@ -202,7 +209,7 @@ public class Veiculo {
 	 */
 	public void curvaDireita(int segundos)
 	{
-		this.setVelocidadeEsteiras(360);
+		this.setVelocidadeEsteirasGrau(360);
 		this.esq.ligaTras();
 		this.dir.ligaFrente(segundos);
 	}
@@ -214,7 +221,7 @@ public class Veiculo {
 	 */
 	public void curvaEsquerda(int segundos)
 	{
-		this.setVelocidadeEsteiras(360);
+		this.setVelocidadeEsteirasGrau(360);
 		this.dir.ligaTras();
 		this.esq.ligaFrente(segundos);
 	}
@@ -226,11 +233,14 @@ public class Veiculo {
 	 */
 	public void segueLinha()
 	{
-		this.setEsteirasForward();
-		while(this.pb.isPreto());
-		this.ev3.corLed(7);
-		this.ev3.beep2();
-		this.stop();
+		if(pbIsAtivo)
+		{
+			this.setEsteirasForward();
+			while(this.pb.isPreto(this.amostras));
+			this.ev3.corLed(7);
+			this.ev3.beep2();
+			this.stop();
+		}
 	}
 	
 	
@@ -240,16 +250,19 @@ public class Veiculo {
 	 */
 	public void recuaAteColidir() 
 	{
-		this.setEsteirasBackward();
-		while(!this.tq.isPressionado());
-		this.ev3.corLed(5);
-		this.ev3.beep1();
-		this.stop();
+		if(toqueIsAtivo)
+		{
+			this.setEsteirasBackward();
+			while(!this.tq.isPressionado(this.amostras));
+			this.ev3.corLed(5);
+			this.ev3.beep1();
+			this.stop();
+		}
 	}
 	
 	
 	/**
-	 * coleta amostras dos sensores ativos 
+	 * coleta amostras de todos os <b>sensores ativos</b>
 	 * @param toque
 	 * @param pretobranco
 	 * @param infravermelho

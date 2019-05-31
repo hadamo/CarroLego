@@ -8,9 +8,7 @@ public abstract class MotorLargo extends Motor{
 		else if(porta == "C") this.motorLargo = new EV3LargeRegulatedMotor(MotorPort.B);
 	}
 	
-	/**
-	 * 
-	 */
+	
 	public int getTacometro() {
 //		this.tacometro = this.roda.motorLargo.getTachoCount();
 		return this.motorLargo.getTachoCount();
@@ -18,26 +16,23 @@ public abstract class MotorLargo extends Motor{
 	
 	public void resetTacometro() {
 		this.motorLargo.resetTachoCount();
-//		this.tacometro = 0;
 	}
-	
-	
+		
 	@Override
-	public void setVelocidade(float rps)
+	public void setVelocidadeGps(float gps)
 	{
-		if(rps <= this.motorLargo.getMaxSpeed()) 
+		if(gps <= this.motorLargo.getMaxSpeed()) 
 		{
-			this.motorLargo.setSpeed(rps);
-			
+			this.motorLargo.setSpeed(gps);
 		}
 	}
 	
 	@Override
-	public void setVelocidade(int rps)
+	public void setVelocidadeRps(float rps)
 	{
 		if(rps <= this.motorLargo.getMaxSpeed()) 
 		{
-			this.motorLargo.setSpeed(rps);
+			this.motorLargo.setSpeed(rps * RPS_TO_GPS);
 		}
 	}
 	
@@ -61,8 +56,7 @@ public abstract class MotorLargo extends Motor{
 	@Override
 	public float getMaxVeloRPS() {
 		// TODO Auto-generated method stub
-		// 1 rps = 6 gps
-		return this.motorLargo.getMaxSpeed()*6;
+		return this.motorLargo.getMaxSpeed()/RPS_TO_GPS;
 	}
 	@Override
 	public void closeMotor()
