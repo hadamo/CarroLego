@@ -31,9 +31,9 @@ public class Uso {
 		//carro.segueLinha();
 		while(Button.ESCAPE.isUp())
 		{
-			System.out.println(carro.iv.coletaAmostra());
-			System.out.println(carro.tq.coletaAmostra(carro.amostras));
-			System.out.println(carro.pb.coletaAmostra(carro.amostras));
+//			System.out.println(carro.iv.coletaAmostra());
+//			System.out.println(carro.tq.coletaAmostra(carro.amostras));
+//			System.out.println(carro.pb.coletaAmostra(carro.amostras));
 			
 		}
 		carro.ev3.corLed(4);
