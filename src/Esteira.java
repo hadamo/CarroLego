@@ -11,17 +11,35 @@ public class Esteira extends MotorLargo{
 		super(porta);
 	}
 	
-	
-	public void frenteAngulo(int angulo)
+	/**
+	 * Sincroniza com outra esteira
+	 * @param esteira2
+	 */
+	public void sincronizarCom(Esteira esteira2)
 	{
-		// faz roda rotacionar at� angulo e libera processamento.
+		this.setMotoresSincronizados(esteira2.motorLargo);
+	}
+	
+	
+	
+	/**
+	 * rotaciona motor x angulos e libera processamento apos isso 
+	 * @param angulo
+	 */
+	public void rotacionaAngulo(int angulo)
+	{
+		//todos os comandos entre start e end sao realizados em sincronia com outros no EV3
+		if(sincAtiva) this.motorLargo.startSynchronization();
 		this.motorLargo.rotateTo(angulo, true);
+		if(sincAtiva) this.motorLargo.endSynchronization();
 	}
 
 	
 	public void ligaFrente() {
 		// TODO Auto-generated method stub
+		if(sincAtiva) this.motorLargo.startSynchronization();
 		this.motorLargo.forward();
+		if(sincAtiva) this.motorLargo.endSynchronization();
 	}
 	/**
 	 * roda gera movimento para a frente por tempo determinado
@@ -29,14 +47,17 @@ public class Esteira extends MotorLargo{
 	 */
 	public void ligaFrente(int tempo) {
 		// TODO Auto-generated method stub
+		if(sincAtiva) this.motorLargo.startSynchronization();
 		this.motorLargo.forward();
 		Delay.msDelay(tempo*1000);
 		this.motorLargo.stop();
+		if(sincAtiva) this.motorLargo.endSynchronization();
 	}
 
 	public void ligaTras() {
-		// TODO Auto-generated method stub
+		if(sincAtiva) this.motorLargo.startSynchronization();
 		this.motorLargo.backward();
+		if(sincAtiva) this.motorLargo.endSynchronization();
 	}
 	
 	/**
@@ -44,9 +65,11 @@ public class Esteira extends MotorLargo{
 	 * @param tempo em segundos
 	 */
 	public void ligaTras(int tempo) {
-		// TODO Auto-generated method stub
+		if(sincAtiva) this.motorLargo.startSynchronization();
 		this.motorLargo.forward();
-		Delay.msDelay(tempo*1000);
+		Delay.msDelay(tempo * 1000);
+		this.motorLargo.stop();
+		if(sincAtiva) this.motorLargo.endSynchronization();
 	}
 	
 	/**
@@ -70,15 +93,18 @@ public class Esteira extends MotorLargo{
 	 */
 	public void freia() {
 		// TODO Auto-generated method stub
+		if(sincAtiva) this.motorLargo.startSynchronization();
 		this.motorLargo.stop();
-		System.out.println("freiou este motor");
+		if(sincAtiva) this.motorLargo.endSynchronization();
 	}
 	/**
 	 * Motor para de gerar movimento, continua rodando ate parar
 	 */
 	public void paraMotor() {
 		// TODO Auto-generated method stub
+		if(sincAtiva) this.motorLargo.startSynchronization();
 		this.motorLargo.flt();
+		if(sincAtiva) this.motorLargo.endSynchronization();
 	}
 	
 }

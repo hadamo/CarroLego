@@ -15,7 +15,8 @@ public class Veiculo {
 	
 	/**
 	 * construtor de veiculo definindo quais sensores <br>
-	 * serao ativados
+	 * serao ativados.
+	 * liga sincronizacao entre esteiras
 	 * @param toque : boolean ativa sensor de toque
 	 * @param pretobranco : boolean ativa sensor preto e branco
 	 * @param infravermelho : boolean ativa sensor infravermelho
@@ -25,6 +26,9 @@ public class Veiculo {
 		garra = new Garra();
 		dir = new Esteira("C");
 		esq = new Esteira("B");
+		//ativa sincronizacao de motores
+		dir.sincronizarCom(esq);
+		esq.sincronizarCom(dir);
 		if(toque) 
 		{
 			toqueIsAtivo = true;
@@ -40,7 +44,7 @@ public class Veiculo {
 		if(infravermelho) 
 		{
 			infravermIsAtivo = true;
-			iv = new SensorInfravermelho(--numSensoresAtivos);
+			iv = new SensorInfravermelho(numSensoresAtivos);
 			numSensoresAtivos ++;
 		}
 		ev3 = new EV3Cerebro();
@@ -48,12 +52,16 @@ public class Veiculo {
 	}
 	/**
 	 * Constroi veiculo e ativa todos os 3 sensores
+	 * ativa sincronizacao de esteiras
 	 */
 	public Veiculo()
 	{
 		garra = new Garra();
 		dir = new Esteira("C");
 		esq = new Esteira("B");
+		//ativa sincronizacao de motores
+		dir.sincronizarCom(esq);
+		esq.sincronizarCom(dir);
 		tq = new SensorToque(0);
 		pb = new SensorPretoBranco(1);
 		iv = new SensorInfravermelho(2);
@@ -62,6 +70,39 @@ public class Veiculo {
 	}
 	
 	
+	///////////////// Sincronizacao ////////////////////
+	/**
+	 * ativa sincronização de de esteiras
+	 */
+	public void ligaSincronizacaoEsteiras()
+	{
+		this.dir.setSincronizacaoOn();
+		this.esq.setSincronizacaoOn();
+	}
+	
+	/**
+	 * desativa sincronização de esteiras
+	 */
+	public void desligaSincronizacaoEsteiras()
+	{
+		this.dir.setSincronizacaoOff();
+		this.esq.setSincronizacaoOff();
+	}
+	
+	/////////////////////////////////////////////////
+	///////////////// Movimento ////////////////////
+	///////////////////////////////////////////////
+
+
+	/**
+	 * para os motores da esteira
+	 */
+	public void stop()
+	{
+		this.esq.freia();
+		this.dir.freia();
+	}
+
 	/**
 	 * seta velocidade de ambas as esteiras para um mesmo valor em rotações por segundo
 	 * @param rps
@@ -147,8 +188,6 @@ public class Veiculo {
 	{
 		this.dir.ligaTras();
 		this.esq.ligaTras();
-		System.out.println(this.dir.getTacometro());
-		System.out.println(this.esq.getTacometro());
 		Delay.msDelay(segundos*1000);
 		this.stop();
 	}
@@ -171,62 +210,66 @@ public class Veiculo {
 	}
 	
 	
-	/**
-	 * para os motores da esteira
-	 */
-	public void stop()
-	{
-		this.esq.freia();
-		this.dir.freia();
-	}
-	
 	
 	/**
-	 * anda sempre para direita
+	 * anda sempre para direita<br>
+	 * A sincronizacao entre motores eh desativada.<br>
+	 * Para reativar use ligaSincronizacaoEsteiras()
 	 */
 	public void curvaDireita()
 	{
 		this.setVelocidadeEsteirasGrau(360);
+		this.desligaSincronizacaoEsteiras();
 		this.esq.ligaTras();
 		this.dir.ligaFrente();
 	}
 	
-	
 	/**
-	 * anda sempre para esquerda
+	 * anda sempre para esquerda<br>
+	 * A sincronizacao entre motores eh desativada.<br>
+	 * Para reativar use ligaSincronizacaoEsteiras()
 	 */
 	public void curvaEsquerda()
 	{
 		this.setVelocidadeEsteirasGrau(360);
+		this.desligaSincronizacaoEsteiras();
 		this.dir.ligaTras();
 		this.esq.ligaFrente();
 	}
 	
 	
 	/**
-	 * faz curva para direita por certa quantidade de tempo em segundos
+	 * faz curva para direita por certa quantidade de tempo em segundos<br>
+	 * a sincronizacao entre motores eh desativada enquanto curva e reativada apos terminar
 	 * @param segundos
 	 */
 	public void curvaDireita(int segundos)
 	{
 		this.setVelocidadeEsteirasGrau(360);
-		this.esq.ligaTras();
+		this.desligaSincronizacaoEsteiras();
+		this.esq.ligaTras(segundos);
 		this.dir.ligaFrente(segundos);
+		this.ligaSincronizacaoEsteiras();
 	}
 	
 	
 	/**
-	 * faz curva para esquerda por certa quantidade de tempo em segundos
+	 * faz curva para esquerda por certa quantidade de tempo em segundos<br>
+	 * a sincronizacao entre motores eh desativada enquanto curva e reativada apos terminar
 	 * @param segundos
 	 */
 	public void curvaEsquerda(int segundos)
 	{
 		this.setVelocidadeEsteirasGrau(360);
-		this.dir.ligaTras();
+		this.desligaSincronizacaoEsteiras();
+		this.dir.ligaTras(segundos);
 		this.esq.ligaFrente(segundos);
+		this.ligaSincronizacaoEsteiras();
 	}
 	
-	
+/////////////////////////////////////////////////
+///////////////// Uso de Sensores //////////////
+///////////////////////////////////////////////
 	/**
 	 * veiculo segue linha reta enquanto ler cor preta <br>
 	 * com sensor de cor
@@ -274,6 +317,11 @@ public class Veiculo {
 		if(infravermelho) this.tq.coletaAmostra(this.amostras);
 	}
 	
+	
+/////////////////////////////////////////////////
+///////////// Gerencia de Portas  //////////////
+///////////////////////////////////////////////
+	
 	/**
 	 * fecha todas as portas ativas <br>
 	 * de motores e sensores <br>
@@ -302,5 +350,4 @@ public class Veiculo {
 		}
 	}
 	
-
 }

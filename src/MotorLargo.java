@@ -1,13 +1,43 @@
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
+import lejos.robotics.RegulatedMotor;
 
 public abstract class MotorLargo extends Motor{
 	public EV3LargeRegulatedMotor motorLargo;
+	protected RegulatedMotor[] motorSincronizado;
+	protected boolean sincAtiva;
+	
+	/**
+	 * construtor de motor regulado largo<br>
+	 * por papdrao sincronizacao comeca ativa
+	 * @param porta
+	 */
 	public MotorLargo(String porta) {
 		if(porta == "B") this.motorLargo = new EV3LargeRegulatedMotor(MotorPort.C);
 		else if(porta == "C") this.motorLargo = new EV3LargeRegulatedMotor(MotorPort.B);
+		this.motorSincronizado = new EV3LargeRegulatedMotor[1];
+		sincAtiva = true;
+
 	}
 	
+	/**
+	 * Marca outro MOTOR regulado para operacoes sincronizadas.
+	 * @param motor2
+	 */
+	void setMotoresSincronizados(RegulatedMotor motor2)
+	{
+		this.motorSincronizado[0] = motor2;
+	}
+	
+	void setSincronizacaoOn()
+	{
+		this.sincAtiva = true;
+	}
+	
+	void setSincronizacaoOff()
+	{
+		this.sincAtiva = false;
+	}
 	
 	public int getTacometro() {
 //		this.tacometro = this.roda.motorLargo.getTachoCount();
@@ -23,7 +53,9 @@ public abstract class MotorLargo extends Motor{
 	{
 		if(gps <= this.motorLargo.getMaxSpeed()) 
 		{
+			if(sincAtiva) this.motorLargo.startSynchronization();
 			this.motorLargo.setSpeed(gps);
+			if(sincAtiva) this.motorLargo.endSynchronization();
 		}
 	}
 	
@@ -32,7 +64,9 @@ public abstract class MotorLargo extends Motor{
 	{
 		if(rps <= this.motorLargo.getMaxSpeed()) 
 		{
+			if(sincAtiva) this.motorLargo.startSynchronization();
 			this.motorLargo.setSpeed(rps * RPS_TO_GPS);
+			if(sincAtiva) this.motorLargo.endSynchronization();
 		}
 	}
 	
