@@ -8,7 +8,7 @@ public class Uso {
 		//seta velocidade do carro
 		carro.setVelocidadeEsteiras(360);
 		//anda pra frente por 5s
-		carro.setEsteirasForward(5);
+		carro.setEsteirasForward(2);
 		//toca um som
 		//carro.ev3.beep1();
 

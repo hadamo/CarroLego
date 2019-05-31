@@ -1,23 +1,24 @@
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
+import lejos.robotics.RegulatedMotor;
 
 public abstract class MotorLargo extends Motor{
 	public EV3LargeRegulatedMotor motorLargo;
-	protected EV3LargeRegulatedMotor[] motorLargoSincronizado;
+	protected RegulatedMotor[] motorSincronizado;
 
 	public MotorLargo(String porta) {
 		if(porta == "B") this.motorLargo = new EV3LargeRegulatedMotor(MotorPort.C);
 		else if(porta == "C") this.motorLargo = new EV3LargeRegulatedMotor(MotorPort.B);
-		this.motorLargoSincronizado = new EV3LargeRegulatedMotor[1];
+		this.motorSincronizado = new EV3LargeRegulatedMotor[1];
 	}
 	
 	/**
 	 * Marca outro MOTOR LARGO para operacoes sincronizadas.
 	 * @param motor2
 	 */
-	void setMotoresSincronizados(EV3LargeRegulatedMotor motor2)
+	void setMotoresSincronizados(RegulatedMotor motor2)
 	{
-		this.motorLargoSincronizado[0] = motor2;
+		this.motorSincronizado[0] = motor2;
 	}
 	/**
 	 * Para de rodar totalmente em sincronia com outro motor<br>

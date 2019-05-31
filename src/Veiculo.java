@@ -5,7 +5,7 @@ public class Veiculo {
 	public Garra garra;
 	public Esteira dir,esq;
 	public SensorToque tq;
-	public SensorInfraVermelho iv;
+	public SensorInfravermelho iv;
 	public SensorPretoBranco pb;
 	public EV3Cerebro ev3;
 	public boolean toqueIsAtivo, pbIsAtivo, infravermIsAtivo;
@@ -39,7 +39,7 @@ public class Veiculo {
 		if(infravermelho) 
 		{
 			infravermIsAtivo = true;
-			iv = new SensorInfraVermelho(--numSensoresAtivos);
+			iv = new SensorInfravermelho(--numSensoresAtivos);
 			numSensoresAtivos ++;
 		}
 		ev3 = new EV3Cerebro();
@@ -59,7 +59,7 @@ public class Veiculo {
 		esq = new Esteira("B");
 		tq = new SensorToque(0);
 		pb = new SensorPretoBranco(1);
-		iv = new SensorInfraVermelho(2);
+		iv = new SensorInfravermelho(2);
 		ev3 = new EV3Cerebro();
 		amostras = new float[3];
 		dir.sincronizarCom(esq);
@@ -98,7 +98,7 @@ public class Veiculo {
 	public void setEsteirasForward(int segundos)
 	{
 		this.dir.ligaFrente(true);
-//		this.esq.ligaFrente();	
+		this.esq.ligaFrente(true);	
 		Delay.msDelay(segundos*1000);
 		this.stop();
 	}
@@ -168,6 +168,7 @@ public class Veiculo {
 	public void stop()
 	{
 		this.dir.freia(true);
+		this.esq.freia(true);
 	}
 	
 	
