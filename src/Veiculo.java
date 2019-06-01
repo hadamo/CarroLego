@@ -62,11 +62,7 @@ public class Veiculo {
 		//ativa sincronizacao de motores
 		dir.sincronizarCom(esq);
 		esq.sincronizarCom(dir);
-		tq = new SensorToque(0);
-		pb = new SensorPretoBranco(1);
-		iv = new SensorInfravermelho(2);
 		ev3 = new EV3Cerebro();
-		amostras = new float[3];
 	}
 	
 	
@@ -270,6 +266,107 @@ public class Veiculo {
 /////////////////////////////////////////////////
 ///////////////// Uso de Sensores //////////////
 ///////////////////////////////////////////////
+	
+	/**
+	 * Ativa sensores que nao foram ativos quando instancia de veiculo for iniciada<br>
+	 * ou sensores que tiveram suas portas fechadas
+	 * @param toque : boolean ativa sensor de toque
+	 * @param pretobranco : boolean ativa sensor preto e branco
+	 * @param infraverm : boolean ativa sensor infravermelho
+	 */
+	public void ativaSensores(boolean toque, boolean pretobranco, boolean infraverm)
+	{
+		if(toque && !toqueIsAtivo)
+		{
+			toqueIsAtivo = true;
+			if(this.tq.getOffset() < 0) //caso sensor nao tenha sido ativado nenhuma vez nesta execucao
+			{
+				this.tq = new SensorToque(numSensoresAtivos);
+			}else 
+			{
+				int offset = this.tq.getOffset();
+				this.tq = new SensorToque(offset);
+			}
+			this.numSensoresAtivos++;
+		}
+		if(pretobranco && !pbIsAtivo)
+		{
+			pbIsAtivo = true;
+			if(this.pb.getOffset() < 0) //caso sensor nao tenha sido ativado nenhuma vez nesta execucao
+			{
+				this.pb = new SensorPretoBranco(numSensoresAtivos);
+			}else 
+			{
+				int offset = this.pb.getOffset();
+				this.pb = new SensorPretoBranco(offset);
+			}
+			this.numSensoresAtivos++;
+		}
+		if(infraverm && !infravermIsAtivo)
+		{
+			infravermIsAtivo = true;
+			if(this.iv.getOffset() < 0) //caso sensor nao tenha sido ativado nenhuma vez nesta execucao
+			{
+				this.iv = new SensorInfravermelho(numSensoresAtivos);
+			}else 
+			{
+				int offset = this.iv.getOffset();
+				this.iv = new SensorInfravermelho(offset);
+			}
+			this.numSensoresAtivos++;
+		}
+		this.amostras = new float[numSensoresAtivos];
+
+	}
+	
+	/**
+	 * Desativa sensores que fora ativos quando instancia de veiculo for iniciada<br>
+	 * ou sensores que foram abertos posteriormente <br>
+	 * OBS: apenas a porta foi fechada, os objetos nao fora destruidos <br>
+	 * O offset do sensor nao mudara quando desativado <br>
+	 * @param toque : boolean desativa sensor de toque
+	 * @param pretobranco : boolean desativa sensor preto e branco
+	 * @param infraverm : boolean desativa sensor infravermelho
+	 */
+	public void desativaSensores(boolean toque, boolean pretobranco, boolean infraverm)
+	{
+		if(toque && toqueIsAtivo)
+		{
+			toqueIsAtivo = false;
+			this.numSensoresAtivos--;
+			this.tq.closeSensor();
+		}
+		if(pretobranco && pbIsAtivo)
+		{
+			pbIsAtivo = false;
+			this.numSensoresAtivos--;
+			this.pb.closeSensor();
+		}
+		if(infraverm && infravermIsAtivo)
+		{
+			infravermIsAtivo = false;
+			this.numSensoresAtivos--;
+			this.iv.closeSensor();
+		}
+		this.amostras = new float[numSensoresAtivos];
+	}
+	
+	/**
+	 * veiculo segue linha reta enquanto nao detectar algo em sua frente <br>
+	 * com sensor infravermelho em modo detector de distancia
+	 */
+	public void forwardEnqtLivre()
+	{
+		if(infravermIsAtivo && this.iv.getModoOperativo() > 0)
+		{
+			this.setEsteirasForward();
+			while(this.iv.getDistancia(this.amostras) >= 18);
+			this.ev3.corLed(2);
+			this.ev3.beep4();
+			this.stop();
+		}
+	}
+	
 	/**
 	 * veiculo segue linha reta enquanto ler cor preta <br>
 	 * com sensor de cor
@@ -306,15 +403,62 @@ public class Veiculo {
 	
 	/**
 	 * coleta amostras de todos os <b>sensores ativos</b>
+	 * OBS1: os dados serao salvos no vetor de amostras do veiculo <br>
+	 * OBS2: pode-se obter dados filtrados utilizando metodos <br>
+	 * de coleta especificos de cada sensor, como: <br>
+	 * <p> getDistancia(amostras) </p>
+	 * <p> isBranco(amostras) </p>
+	 * <p> isPressionado(amostras) </p>
 	 * @param toque
 	 * @param pretobranco
 	 * @param infravermelho
 	 */
-	public void coletaAmostras(boolean toque, boolean pretobranco, boolean infravermelho)
+	public void coletaAmostras()
 	{
-		if(toque) this.tq.coletaAmostra(this.amostras);
-		if(pretobranco) this.tq.coletaAmostra(this.amostras);
-		if(infravermelho) this.tq.coletaAmostra(this.amostras);
+		if(toqueIsAtivo) this.tq.coletaAmostra(this.amostras);
+		if(pbIsAtivo) this.pb.coletaAmostra(this.amostras);
+		if(infravermIsAtivo) this.iv.coletaAmostra(this.amostras);
+	}
+	
+/////////////////////////////////////////////////
+//////////////////// Garra  ////////////////////
+///////////////////////////////////////////////	
+	/**
+	 * abre a garra totalmente<br>
+	 * OBS: rotacao eh relativa a posicao atual do motor
+	 */
+	public void abreGarra()
+	{
+		this.garra.abreTotal();
+	}
+	
+	/**
+	 * abre a garra em angulo especificado<br>
+	 * OBS: rotacao eh relativa a posicao atual do motor
+	 * @param angulo : int
+	 */
+	public void abreGarra(int angulo)
+	{
+		this.garra.abreAng(angulo);
+	}
+	
+	/**
+	 * fecha garra totalmente<br>
+	 * OBS: rotacao eh relativa a posicao atual do motor
+	 */
+	public void fechaGarra()
+	{
+		this.garra.fechaTotal();
+	}
+	
+	/**
+	 * fecha garra em angulo especificado<br>
+	 * OBS: rotacao eh relativa a posicao atual do motor
+	 * @param angulo : int
+	 */
+	public void fechaGarra(int angulo)
+	{
+		this.garra.fechaAng(angulo);
 	}
 	
 	
@@ -326,7 +470,8 @@ public class Veiculo {
 	 * fecha todas as portas ativas <br>
 	 * de motores e sensores <br>
 	 * OBS: para fechar um motor ou sensor em especifico<br>
-	 * utilize o metodo close proprio dele.
+	 * Utilize o seu metodo close.<br>
+	 * Para reabrir um motor ou sensor, instancie-o novamente.
 	 */
 	public void fechaPortas()
 	{
@@ -337,16 +482,19 @@ public class Veiculo {
 		{
 			this.tq.closeSensor();
 			this.toqueIsAtivo = false;
+			this.numSensoresAtivos--;
 		}
 		if(pbIsAtivo)
 		{
 			this.pb.closeSensor();
 			this.pbIsAtivo = false;
+			this.numSensoresAtivos--;
 		}
 		if(infravermIsAtivo)
 		{ 
 			this.iv.closeSensor();
 			this.infravermIsAtivo = false;
+			this.numSensoresAtivos--;
 		}
 	}
 	

@@ -9,7 +9,7 @@ public abstract class MotorLargo extends Motor{
 	
 	/**
 	 * construtor de motor regulado largo<br>
-	 * por papdrao sincronizacao comeca ativa
+	 * por padrao sincronizacao comeca ativada
 	 * @param porta
 	 */
 	public MotorLargo(String porta) {
@@ -29,11 +29,18 @@ public abstract class MotorLargo extends Motor{
 		this.motorSincronizado[0] = motor2;
 	}
 	
+	/**
+	 * liga sincronizacao de motores <br>
+	 * motores sincronizados realizarao suas tarefas em sincronia :o
+	 */
 	void setSincronizacaoOn()
 	{
 		this.sincAtiva = true;
 	}
 	
+	/**
+	 * desliga sincronizacao de motores
+	 */
 	void setSincronizacaoOff()
 	{
 		this.sincAtiva = false;

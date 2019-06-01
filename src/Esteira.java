@@ -2,9 +2,10 @@ import lejos.utility.Delay;
 
 public class Esteira extends MotorLargo{
 	/**
-	 * Construtor de Esteira
-	 * 
-	 * @param porta : "B" ou "C"
+	 * Construtor de Esteira<br>
+	 * OBS: por padrao, sincronizacao comeca ativada
+	 * @param porta : String <br>
+	 * OBS: Apenas "B" ou "C" :
 	 */
 	public Esteira(String porta) 
 	{

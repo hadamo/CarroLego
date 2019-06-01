@@ -3,7 +3,7 @@ import lejos.robotics.SampleProvider;
 
 public abstract class Sensor {
 	protected int amostra;
-	protected int offset;
+	protected int offset = -1;
 	protected int sizeAmostra;
 	public SampleProvider receptorAmostra;
 

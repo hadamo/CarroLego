@@ -1,7 +1,7 @@
 
 public abstract class Motor {
-	public final int VELOCIDADEPADRAO_RPS = 360;// rps
-	public final int TEMPOPADRAO = 1000; //milisegundos
+	public final int VELOCIDADE_PADRAO_RPS = 360;// rps
+	public final int TEMPO_PADRAO_MS = 1000; //milisegundos
 	public final double GRAU_POR_CM = 25.7142857; 
 	public final double CM_POR_GRAU = 0.03888889;
 	public final float RPS_TO_GPS = 360;
@@ -11,15 +11,20 @@ public abstract class Motor {
 	
 	/**
 	 * Define velocidade em rotacao por segundo<br>
+	 * O motor vai rotacionar @param vezes em 1 segundo e repetir <br>
+	 * cada rotacao = 360 graus
 	 * *OBS1: velocidade max em superficie plana eh 100 * voltagem atual da bateria
 	 * *OBS2: eh feita conversao para grau por segundo dentro do metodo
+	 * *OBS3: apenas define velocidade, nao inicia movimento
 	 * @param gps : float graus por segundo
 	 */
 	public abstract void setVelocidadeRps(float rps);
 	
 	/**
 	 * Define velocidade em grau por segundo<br>
+	 * Motor vai rotacionar x graus em 1 segundo e repetir
 	 * *OBS: velocidade max em superficie plana eh 100 * voltagem atual da bateria
+	 * *OBS3: apenas define velocidade, nao inicia movimento
 	 * @param gps : float graus por segundo
 	 */
 	public abstract void setVelocidadeGps(float gps);

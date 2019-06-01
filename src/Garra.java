@@ -14,10 +14,10 @@ public class Garra extends MotorMedio{
 	/** abre garra totalmente
 	 * 
 	 */
-	public void abre() 
+	public void abreTotal() 
 	{
 //		TODO
-		motor.rotateTo(this.anguloAbertura, true);
+		motor.rotate(this.anguloAbertura, true);
 		this.aberta = true;
 	}
 	
@@ -25,19 +25,19 @@ public class Garra extends MotorMedio{
 	 * Abre garra no angulo especificado
 	 * @param angulo
 	 */
-	public void abre(int angulo)
+	public void abreAng(int angulo)
 	{
-		this.motor.rotateTo(angulo, true);
+		this.motor.rotate(angulo, true);
 		this.aberta = true;
 	}
 	
 	/**
 	 * Fecha garra totalmente
 	 */
-	public void fecha()
+	public void fechaTotal()
 	{
 //		TODO
-		motor.rotateTo(this.anguloFechamento, true);
+		motor.rotate(this.anguloFechamento, true);
 		this.aberta = false;
 	}
 	
@@ -45,7 +45,7 @@ public class Garra extends MotorMedio{
 	 * fecha garra no angulo especificado
 	 * @param angulo
 	 */
-	public void fecha(int angulo)
+	public void fechaAng(int angulo)
 	{
 		this.motor.rotateTo(-angulo, true);
 		this.aberta = false;
@@ -67,11 +67,11 @@ public class Garra extends MotorMedio{
 	
 	/**
 	 * Verifica se a garra esta apertando algo com as pontas.<br>
-	 * Caso esteja, o motor esta como Stalled
-	 * Precisa testar
+	 * OBS: <b>apenas com as pontas</b>, nao detecta se estiver dentro da garra<br>
+	 * Caso esteja, o motor estara como Stalled
 	 * @return 
 	 */
-	public boolean isApertando()
+	public boolean isCheia()
 	{
 		return this.motor.isStalled();
 	}

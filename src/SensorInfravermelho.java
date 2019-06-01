@@ -7,6 +7,7 @@ public class SensorInfravermelho extends Sensor {
 	private int comandoRecebido;
 	private int comandoPadrao;
 	private int modoOperativo;
+	public int distanciaPadraocm = 20;
 	/**
 	 * construtor padrao de sensor infravermelho<br>
 	 * Modo operativo padrao: receptor de controle<br>
@@ -21,7 +22,7 @@ public class SensorInfravermelho extends Sensor {
 		this.canalControle = 0;
 		this.comandoRecebido = -1;
 		this.comandoPadrao = 0;
-		this.modoOperativo = 1;
+		this.modoOperativo = 0;
 	}
 	
 	/**
@@ -39,10 +40,11 @@ public class SensorInfravermelho extends Sensor {
 		this.comandoPadrao = 0;
 		this.modoOperativo = modoOp;
 	}
-	public int getCanalControle()
-	{
-		return this.canalControle;
-	}
+
+	
+	////////////////////////////////////////
+	//////////// Modo de Operacao /////////
+	///////////////////////////////////////
 	
 	/**
 	 * Muda modo operativo do sensor infravermelho
@@ -53,6 +55,18 @@ public class SensorInfravermelho extends Sensor {
 	{
 		this.modoOperativo = x;
 	}
+	
+	
+	public int getModoOperativo()
+	{
+		return this.modoOperativo;
+	}
+	
+	
+
+	////////////////////////////////////////
+	////// Configuracao Modo Controle //////
+	///////////////////////////////////////
 	/**
 	 * Set canal Padrão para controle remoto, deve ser<br>
 	 * valor no intervalo [0,3].<br>
@@ -64,6 +78,16 @@ public class SensorInfravermelho extends Sensor {
 		if(novoCanal>=0 && novoCanal<4) this.canalControle = novoCanal;
 		else System.err.println("Valor Invalido, insira valor x em [0,3]");
 	}
+	
+	/**
+	 * verifica o canal atual para receber comando de controle remoto
+	 * @return
+	 */
+	public int getCanalControle()
+	{
+		return this.canalControle;
+	}
+	
 	
 	/**
 	 * Set comando Padrão para controle remoto, deve ser<br>
@@ -86,6 +110,11 @@ public class SensorInfravermelho extends Sensor {
 		return this.comandoPadrao;
 	}
 
+	
+
+	////////////////////////////////////////
+	//////////// Amostragem  ///////////////
+	///////////////////////////////////////
 	@Override 
 	/**
 	 * Metodo que recebe amostras do sensor em 2 modos diferentes.
@@ -105,16 +134,17 @@ public class SensorInfravermelho extends Sensor {
 	 * @return numero do botao (ou combinacao de botoes) : int
 	 */
 	public int coletaAmostra(float[] amostrasRecebidas) {
-		if(this.modoOperativo == 1)
-		{
-			this.comandoRecebido = sensor.getRemoteCommand(this.canalControle);
-			amostrasRecebidas[this.offset] = this.comandoRecebido;
-			return this.comandoRecebido;
-		}else
+		if(this.modoOperativo > 0)
 		{
 			this.receptorAmostra = sensor.getDistanceMode();
 			this.sensor.fetchSample(amostrasRecebidas, this.offset);
 			return (int) amostrasRecebidas[this.offset];
+			
+		}else
+		{
+			this.comandoRecebido = sensor.getRemoteCommand(this.canalControle);
+			amostrasRecebidas[this.offset] = this.comandoRecebido;
+			return this.comandoRecebido;
 		}
 	}
 	
@@ -126,7 +156,7 @@ public class SensorInfravermelho extends Sensor {
 	 */
 	public int getComandoControle(float[] amostrasRecebidas)
 	{
-		this.modoOperativo = 1;
+		this.modoOperativo = 0;
 		this.comandoRecebido = coletaAmostra(amostrasRecebidas);
 		return this.comandoRecebido;
 	}
@@ -138,7 +168,7 @@ public class SensorInfravermelho extends Sensor {
 	 */
 	public int getDistancia(float[] amostrasRecebidas)
 	{
-		this.modoOperativo = 2;
+		this.modoOperativo = 1;
 		return coletaAmostra(amostrasRecebidas);
 	}
 	
