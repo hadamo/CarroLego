@@ -128,7 +128,6 @@ public class Veiculo {
 	public void setEsteirasForward()
 	{
 		this.dir.ligaFrente();
-		ev3.esperaMilissegundos(delayEntreMotores);
 		this.esq.ligaFrente();		
 	}
 	
@@ -351,54 +350,7 @@ public class Veiculo {
 		this.amostras = new float[numSensoresAtivos];
 	}
 	
-	/**
-	 * veiculo segue linha reta enquanto nao detectar algo em sua frente <br>
-	 * com sensor infravermelho em modo detector de distancia
-	 */
-	public void forwardEnqtLivre()
-	{
-		if(infravermIsAtivo && this.iv.getModoOperativo() > 0)
-		{
-			this.setEsteirasForward();
-			while(this.iv.getDistancia(this.amostras) >= 18);
-			this.ev3.corLed(2);
-			this.ev3.beep4();
-			this.stop();
-		}
-	}
 	
-	/**
-	 * veiculo segue linha reta enquanto ler cor preta <br>
-	 * com sensor de cor
-	 */
-	public void segueLinha()
-	{
-		if(pbIsAtivo)
-		{
-			this.setEsteirasForward();
-			while(this.pb.isPreto(this.amostras));
-			this.ev3.corLed(7);
-			this.ev3.beep2();
-			this.stop();
-		}
-	}
-	
-	
-	/**
-	 * veiculo anda para tras ate o sensor<br>
-	 * de toque detectar que foi pressionado contra algo
-	 */
-	public void recuaAteColidir() 
-	{
-		if(toqueIsAtivo)
-		{
-			this.setEsteirasBackward();
-			while(!this.tq.isPressionado(this.amostras));
-			this.ev3.corLed(5);
-			this.ev3.beep1();
-			this.stop();
-		}
-	}
 	
 	
 	/**
@@ -418,6 +370,155 @@ public class Veiculo {
 		if(toqueIsAtivo) this.tq.coletaAmostra(this.amostras);
 		if(pbIsAtivo) this.pb.coletaAmostra(this.amostras);
 		if(infravermIsAtivo) this.iv.coletaAmostra(this.amostras);
+	}
+	
+	/**
+	 * Para modo de distancia
+	 * Coleta distancia do sensor infravermelho até superficie ou objeto em sua direção.
+	 * OBS: medida em cm.
+	 * OBS: no inicio da medida pode gerar valores estranhos
+	 * @return distancia : int
+	 */
+	public int getDistancia()
+	{
+		int distancia = -1;
+		if(infravermIsAtivo)
+		{
+			distancia = this.iv.getDistancia(this.amostras);
+		}
+		return distancia;
+	}
+	
+	/**
+	 * Para modo de receptor de controle <br>o comando do CONTROLE REMOTO pelo sensor INFRAVERMELHO,<br>
+	 * Apenas para o canal atualmente definido como Padrao.
+	 * Guarda comando no vetor de amostras recebidas
+	 * Comandos:<br>
+	 * -1 sensor desativado<br>
+	 * 0 nenhum comando ou comando nao reconhecido<br>
+	 * 1 TOP-LEFT<br> 2 BOTTOM-LEFT<br>3 TOP-RIGHT<br>4 BOTTOM-RIGHT<br>5 TOP-LEFT + TOP-RIGHT<br>
+	 * 6 TOP-LEFT + BOTTOM-RIGHT<br>7 BOTTOM-LEFT + TOP-RIGHT<br>8 BOTTOM-LEFT + BOTTOM-RIGHT<br>
+	 * 9 CENTRE/BEACON<br>10 BOTTOM-LEFT + TOP-LEFT<br>11 TOP-RIGHT + BOTTOM-RIGHT<br><br>
+	 * @return comando : int
+	 */
+	public int getComando()
+	{
+		int comando = -1;
+		if(infravermIsAtivo)
+		{
+			comando = this.iv.getComandoControle(this.amostras);
+		}
+		return comando;
+	}
+	
+	/**
+	 * Verifica se o sensor de toque esta pressionado.
+	 * OBS: sensor deve estar ativado.
+	 * @return pressao : boolean
+	 */
+	public boolean isPressionado()
+	{
+		boolean pressao = false;
+		if(toqueIsAtivo)
+		{
+			pressao = this.tq.isPressionado(this.amostras);
+		}
+		return pressao;
+	}
+	
+	/**
+	 * verifica se a cor da superficie na frente do sensor de cor é preta;
+	 * @return black : boolean
+	 */
+	public boolean isPreto()
+	{
+		boolean black = false;
+		if(pbIsAtivo)
+		{
+			black = this.pb.isPreto(this.amostras);
+		}
+		return black;
+	}
+	
+	/**
+	 * verifica se a cor da superficie na frente do sensor de cor é branca.
+	 * @return white : boolean
+	 */
+	public boolean isBranco()
+	{
+		boolean white = false;
+		if(pbIsAtivo)
+		{
+			white = this.pb.isBranco(this.amostras);
+		}
+		return white;
+	}
+	
+	/**
+	 * Verifica qual cor esta sendo observada
+	 * OBS: sensor tem muitas limitações físicas e não identifica a cor certa<br>
+	 * dependendo de luminosidade, cor, tons, bateria, etc.
+	 */
+	public String getCor()
+	{
+		String cor = "null";
+		if(pbIsAtivo)
+		{
+			cor = this.pb.getNomeCor(this.amostras);
+		}
+		return cor;
+	}
+	
+	
+	
+	/**
+	 * veiculo segue linha reta enquanto nao detectar algo em sua frente <br>
+	 * com sensor infravermelho em modo detector de distancia
+	 * @param distanciaDoSensor : int  a qual distancia do sensor um objeto deve estar para parar o carro.
+	 */
+	public void forwardEnqtLivre(int distanciaDoSensor)
+	{
+		if(infravermIsAtivo && this.iv.getModoOperativo() > 0)
+		{
+			this.setEsteirasForward();
+			while(this.getDistancia() >= distanciaDoSensor);
+			this.ev3.corLed(2);
+			this.ev3.beep4();
+			this.stop();
+		}
+	}
+	
+	/**
+	 * veiculo segue linha reta enquanto ler cor preta <br>
+	 * com sensor de cor
+	 */
+	public void segueLinha()
+	{
+		if(pbIsAtivo)
+		{
+			this.setEsteirasForward();
+			while(this.isPreto());
+			this.ev3.corLed(7);
+			this.ev3.beep2();
+			this.stop();
+		}
+	}
+	
+	
+	/**
+	 * veiculo anda para tras ate o sensor<br>
+	 * de toque detectar que foi pressionado contra algo
+	 */
+	public void recuaAteColidir() 
+	{
+		if(toqueIsAtivo)
+		{
+			this.setEsteirasBackward();
+			while(!this.isPressionado());
+			this.ev3.corLed(5);
+			this.ev3.beep1();
+			this.stop();
+		}
 	}
 	
 /////////////////////////////////////////////////
