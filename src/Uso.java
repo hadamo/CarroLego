@@ -1,3 +1,4 @@
+import lejos.hardware.Button;
 
 public class Uso {
 	
@@ -64,29 +65,29 @@ public class Uso {
 		 * ao curvar a velocidade muda para 360 gps e os motores param a sincronizacao 
 		 * quando em versao de movimento sem tempo definido
 		 */
-		carro.curvaDireita(2);
-		carro.curvaEsquerda(2);
+//		carro.curvaDireita(2);
+//		carro.curvaEsquerda(2);
 		
 		/*
 		 * carro toca um sinal sonoro rapidamente
 		 * existem 5 opcoes: beep1, beep2, ..., beep5
 		 */
-		carro.ev3.beep1();
+//		carro.ev3.beep1();
 		
 		/*
 		 * carro espera t segundos para realizar proximo comando
 		 * obs: existe opcao para milissegundos com esperaMilissegundos(t)
 		 */
-		carro.ev3.esperaSegundos(2);
-		carro.ev3.beep5();
+//		carro.ev3.esperaSegundos(2);
+//		carro.ev3.beep5();
 		
 		
 		/*
 		 * carro anda e para
 		 */
-		carro.setEsteirasForward();
-		carro.ev3.esperaMilissegundos(500);
-		carro.stop();
+//		carro.setEsteirasForward();
+//		carro.ev3.esperaMilissegundos(500);
+//		carro.stop();
 		
 		
 		/*
@@ -111,10 +112,6 @@ public class Uso {
 		 */
 		carro.recuaAteColidir();
 		
-		/*
-		 * carro segue reto ate o fim de linha preta
-		 */
-		carro.segueLinha();
 		
 		/*
 		 * carro coleta sinais de controle remoto
@@ -125,21 +122,16 @@ public class Uso {
 		 * eh possivel mudar para modo detector de distancia, que
 		 * mede distancia em cm de algum objeto ou superficie na frente do sensor
 		 */
-		carro.coletaAmostras();
-		System.out.println(carro.amostras[carro.iv.getOffset()]);
+//		carro.coletaAmostras();
+//		System.out.println(carro.amostras[carro.iv.getOffset()]);
 		
-		/*
-		 * carro segue reto ate detectar algo na sua frente
-		 * OBS: se for muito rapido pode bater
-		 */
-		carro.iv.setModoOperativo(2);
-		carro.forwardEnqtLivre();
 		
 		/*
 		 * desativa  sensor de toque
 		 * OBS: argumentos segue mesma ordem de ativasensores() e construtor de veiculo
 		 */
 		carro.desativaSensores(true, true, true);
+		
 		
 		/*
 		 * liga o sensor de toque, caso tenha sido desligado
@@ -152,12 +144,15 @@ public class Uso {
 		 * OBS: 7 combinacoes possiveis: corLed(1), ... , corLed(7);
 		 */
 		carro.ev3.corLed(4);
+
+		
 		
 		/*
 		 * fecha todas as portas abertas
 		 * de sensores e motores
 		 */
 		carro.fechaPortas();
+		
 	}
 
 }
