@@ -27,7 +27,7 @@ public class Veiculo {
 		dir = new Esteira("C");
 		esq = new Esteira("B");
 		//ativa sincronizacao de motores
-		dir.sincronizarCom(esq);
+		//dir.sincronizarCom(esq);
 		esq.sincronizarCom(dir);
 		if(toque) 
 		{
@@ -49,6 +49,8 @@ public class Veiculo {
 		}
 		ev3 = new EV3Cerebro();
 		amostras = new float[numSensoresAtivos];
+		ev3.beep1();
+		ev3.corLed(1);
 	}
 	/**
 	 * Constroi veiculo e ativa todos os 3 sensores
@@ -60,9 +62,11 @@ public class Veiculo {
 		dir = new Esteira("C");
 		esq = new Esteira("B");
 		//ativa sincronizacao de motores
-		dir.sincronizarCom(esq);
+		//dir.sincronizarCom(esq);
 		esq.sincronizarCom(dir);
 		ev3 = new EV3Cerebro();
+		ev3.beep1();
+		ev3.corLed(1);
 	}
 	
 	
@@ -198,7 +202,6 @@ public class Veiculo {
 	{
 		this.setVelocidadeEsteirasRotacao(rps);
 		this.dir.ligaTras();
-		this.ev3.esperaMilissegundos(delayEntreMotores);
 		this.esq.ligaTras();
 		Delay.msDelay(segundos*1000);
 		this.stop();
@@ -213,10 +216,21 @@ public class Veiculo {
 	 */
 	public void curvaDireita()
 	{
-		this.setVelocidadeEsteirasGrau(360);
+		this.desligaSincronizacaoEsteiras();
+		this.esq.ligaFrente();
+		this.dir.paraMotor();
+	}
+	
+	/**
+	 * recua para direita<br>
+	 * A sincronizacao entre motores eh desativada.<br>
+	 * Para reativar use ligaSincronizacaoEsteiras()
+	 */
+	public void recuaDireita()
+	{
 		this.desligaSincronizacaoEsteiras();
 		this.esq.ligaTras();
-		this.dir.ligaFrente();
+		this.dir.paraMotor();
 	}
 	
 	/**
@@ -226,10 +240,21 @@ public class Veiculo {
 	 */
 	public void curvaEsquerda()
 	{
-		this.setVelocidadeEsteirasGrau(360);
+		this.desligaSincronizacaoEsteiras();
+		this.dir.ligaFrente();
+		this.esq.paraMotor();
+	}
+	
+	/**
+	 * recua para esquerda<br>
+	 * A sincronizacao entre motores eh desativada.<br>
+	 * Para reativar use ligaSincronizacaoEsteiras()
+	 */
+	public void recuaEsquerda()
+	{
 		this.desligaSincronizacaoEsteiras();
 		this.dir.ligaTras();
-		this.esq.ligaFrente();
+		this.esq.paraMotor();
 	}
 	
 	
@@ -240,13 +265,24 @@ public class Veiculo {
 	 */
 	public void curvaDireita(int segundos)
 	{
-		this.setVelocidadeEsteirasGrau(360);
 		this.desligaSincronizacaoEsteiras();
-		this.esq.ligaTras(segundos);
-		this.dir.ligaFrente(segundos);
+		this.esq.ligaFrente(segundos);
+		this.dir.paraMotor();
 		this.ligaSincronizacaoEsteiras();
 	}
 	
+	/**
+	 * recua curvando para direita por certa quantidade de tempo em segundos<br>
+	 * a sincronizacao entre motores eh desativada enquanto curva e reativada apos terminar
+	 * @param segundos
+	 */
+	public void recuaDireita(int segundos)
+	{
+		this.desligaSincronizacaoEsteiras();
+		this.esq.ligaTras(segundos);
+		this.dir.paraMotor();
+		this.ligaSincronizacaoEsteiras();
+	}
 	
 	/**
 	 * faz curva para esquerda por certa quantidade de tempo em segundos<br>
@@ -255,10 +291,22 @@ public class Veiculo {
 	 */
 	public void curvaEsquerda(int segundos)
 	{
-		this.setVelocidadeEsteirasGrau(360);
+		this.desligaSincronizacaoEsteiras();
+		this.dir.ligaFrente(segundos);
+		this.esq.paraMotor();
+		this.ligaSincronizacaoEsteiras();
+	}
+	
+	/**
+	 * recua com curva para esquerda por certa quantidade de tempo em segundos<br>
+	 * a sincronizacao entre motores eh desativada enquanto curva e reativada apos terminar
+	 * @param segundos
+	 */
+	public void recuaEsquerda(int segundos)
+	{
 		this.desligaSincronizacaoEsteiras();
 		this.dir.ligaTras(segundos);
-		this.esq.ligaFrente(segundos);
+		this.esq.paraMotor();
 		this.ligaSincronizacaoEsteiras();
 	}
 	
