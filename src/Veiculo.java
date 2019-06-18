@@ -6,9 +6,10 @@ public class Veiculo {
 	public Esteira dir,esq;
 	public SensorToque tq;
 	public SensorInfravermelho iv;
-	public SensorPretoBranco pb;
+	public SensorCor corDir;
+	public SensorCor corEsq;
 	public EV3Cerebro ev3;
-	public boolean toqueIsAtivo, pbIsAtivo, infravermIsAtivo;
+	public boolean toqueIsAtivo, corDirAtivo, corEsqAtivo, infravermIsAtivo;
 	private int numSensoresAtivos = 0;
 	public float[] amostras;
 	public static int delayEntreMotores = 100;
@@ -18,10 +19,11 @@ public class Veiculo {
 	 * serao ativados.
 	 * liga sincronizacao entre esteiras
 	 * @param toque : boolean ativa sensor de toque
-	 * @param pretobranco : boolean ativa sensor preto e branco
+	 * @param colorDir : boolean ativa sensor de cor Direito
+	 * @param colorDir : boolean ativa sensor de cor Esquerdo
 	 * @param infravermelho : boolean ativa sensor infravermelho
 	 */
-	public Veiculo(boolean toque, boolean pretobranco, boolean infravermelho)
+	public Veiculo(boolean toque, boolean colorDir, boolean colorEsq, boolean infravermelho)
 	{
 		garra = new Garra();
 		dir = new Esteira("C");
@@ -35,10 +37,16 @@ public class Veiculo {
 			tq = new SensorToque(numSensoresAtivos);
 			numSensoresAtivos ++;
 		}
-		if(pretobranco)
+		if(colorDir)
 		{
-			pbIsAtivo = true;
-			pb = new SensorPretoBranco(numSensoresAtivos);
+			corDirAtivo = true;
+			corDir = new SensorCor(numSensoresAtivos,1);
+			numSensoresAtivos ++;
+		}
+		if(colorEsq)
+		{
+			corEsqAtivo = true;
+			corEsq = new SensorCor(numSensoresAtivos,3);
 			numSensoresAtivos ++;
 		}
 		if(infravermelho) 
@@ -318,10 +326,10 @@ public class Veiculo {
 	 * Ativa sensores que nao foram ativos quando instancia de veiculo for iniciada<br>
 	 * ou sensores que tiveram suas portas fechadas
 	 * @param toque : boolean ativa sensor de toque
-	 * @param pretobranco : boolean ativa sensor preto e branco
+	 * @param colorDir : boolean ativa sensor preto e branco
 	 * @param infraverm : boolean ativa sensor infravermelho
 	 */
-	public void ativaSensores(boolean toque, boolean pretobranco, boolean infraverm)
+	public void ativaSensores(boolean toque, boolean colorDir,boolean colorEsq, boolean infraverm)
 	{
 		if(toque && !toqueIsAtivo)
 		{
@@ -336,16 +344,29 @@ public class Veiculo {
 			}
 			this.numSensoresAtivos++;
 		}
-		if(pretobranco && !pbIsAtivo)
+		if(colorDir && !corDirAtivo)
 		{
-			pbIsAtivo = true;
-			if(this.pb.getOffset() < 0) //caso sensor nao tenha sido ativado nenhuma vez nesta execucao
+			corDirAtivo = true;
+			if(this.corDir.getOffset() < 0) //caso sensor nao tenha sido ativado nenhuma vez nesta execucao
 			{
-				this.pb = new SensorPretoBranco(numSensoresAtivos);
+				this.corDir = new SensorCor(numSensoresAtivos,1);
 			}else 
 			{
-				int offset = this.pb.getOffset();
-				this.pb = new SensorPretoBranco(offset);
+				int offset = this.corDir.getOffset();
+				this.corDir = new SensorCor(offset,1);
+			}
+			this.numSensoresAtivos++;
+		}
+		if(colorEsq && !corEsqAtivo)
+		{
+			corDirAtivo = true;
+			if(this.corEsq.getOffset() < 0) //caso sensor nao tenha sido ativado nenhuma vez nesta execucao
+			{
+				this.corEsq = new SensorCor(numSensoresAtivos,3);
+			}else 
+			{
+				int offset = this.corEsq.getOffset();
+				this.corEsq = new SensorCor(offset,3);
 			}
 			this.numSensoresAtivos++;
 		}
@@ -372,10 +393,10 @@ public class Veiculo {
 	 * OBS: apenas a porta foi fechada, os objetos nao fora destruidos <br>
 	 * O offset do sensor nao mudara quando desativado <br>
 	 * @param toque : boolean desativa sensor de toque
-	 * @param pretobranco : boolean desativa sensor preto e branco
+	 * @param colorDir : boolean desativa sensor preto e branco
 	 * @param infraverm : boolean desativa sensor infravermelho
 	 */
-	public void desativaSensores(boolean toque, boolean pretobranco, boolean infraverm)
+	public void desativaSensores(boolean toque, boolean colorDir, boolean colorEsq, boolean infraverm)
 	{
 		if(toque && toqueIsAtivo)
 		{
@@ -383,11 +404,17 @@ public class Veiculo {
 			this.numSensoresAtivos--;
 			this.tq.closeSensor();
 		}
-		if(pretobranco && pbIsAtivo)
+		if(colorDir && corDirAtivo)
 		{
-			pbIsAtivo = false;
+			corDirAtivo = false;
 			this.numSensoresAtivos--;
-			this.pb.closeSensor();
+			this.corDir.closeSensor();
+		}
+		if(colorEsq && corEsqAtivo)
+		{
+			corEsqAtivo = false;
+			this.numSensoresAtivos--;
+			this.corEsq.closeSensor();
 		}
 		if(infraverm && infravermIsAtivo)
 		{
@@ -416,7 +443,8 @@ public class Veiculo {
 	public void coletaAmostras()
 	{
 		if(toqueIsAtivo) this.tq.coletaAmostra(this.amostras);
-		if(pbIsAtivo) this.pb.coletaAmostra(this.amostras);
+		if(corDirAtivo) this.corDir.coletaAmostra(this.amostras);
+		if(corEsqAtivo) this.corEsq.coletaAmostra(this.amostras);
 		if(infravermIsAtivo) this.iv.coletaAmostra(this.amostras);
 	}
 	
@@ -476,28 +504,38 @@ public class Veiculo {
 	
 	/**
 	 * verifica se a cor da superficie na frente do sensor de cor é preta;
+	 * @param lado : <b>direito<b>  ou <b>esquerdo</b> referente ao sensor
 	 * @return black : boolean
 	 */
-	public boolean isPreto()
+	public boolean isPreto(String lado)
 	{
 		boolean black = false;
-		if(pbIsAtivo)
+		if(corDirAtivo && lado == "direito")
 		{
-			black = this.pb.isPreto(this.amostras);
+			black = this.corDir.isPreto(this.amostras);
+		}
+		if(corEsqAtivo && lado == "esquerdo")
+		{
+			black = this.corEsq.isPreto(this.amostras);
 		}
 		return black;
 	}
 	
 	/**
 	 * verifica se a cor da superficie na frente do sensor de cor é branca.
+	 * @param lado : <b>direito<b>  ou <b>esquerdo</b> referente ao sensor
 	 * @return white : boolean
 	 */
-	public boolean isBranco()
+	public boolean isBranco(String lado)
 	{
 		boolean white = false;
-		if(pbIsAtivo)
+		if(corDirAtivo && lado == "direito")
 		{
-			white = this.pb.isBranco(this.amostras);
+			white = this.corDir.isPreto(this.amostras);
+		}
+		if(corEsqAtivo && lado == "esquerdo")
+		{
+			white = this.corEsq.isPreto(this.amostras);
 		}
 		return white;
 	}
@@ -510,9 +548,9 @@ public class Veiculo {
 	public String getCor()
 	{
 		String cor = "null";
-		if(pbIsAtivo)
+		if(corDirAtivo)
 		{
-			cor = this.pb.getNomeCor(this.amostras);
+			cor = this.corDir.getNomeCor(this.amostras);
 		}
 		return cor;
 	}
@@ -540,12 +578,12 @@ public class Veiculo {
 	 * veiculo segue linha reta enquanto ler cor preta <br>
 	 * com sensor de cor
 	 */
-	public void segueLinha()
+	public void segueLinha(String Lado)
 	{
-		if(pbIsAtivo)
+		if(corDirAtivo)
 		{
 			this.setEsteirasForward();
-			while(this.isPreto());
+			while(this.isPreto(Lado));
 			this.ev3.corLed(7);
 			this.ev3.beep2();
 			this.stop();
@@ -633,10 +671,10 @@ public class Veiculo {
 			this.toqueIsAtivo = false;
 			this.numSensoresAtivos--;
 		}
-		if(pbIsAtivo)
+		if(corDirAtivo)
 		{
-			this.pb.closeSensor();
-			this.pbIsAtivo = false;
+			this.corDir.closeSensor();
+			this.corDirAtivo = false;
 			this.numSensoresAtivos--;
 		}
 		if(infravermIsAtivo)

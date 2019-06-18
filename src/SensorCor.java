@@ -1,15 +1,18 @@
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
 
-public class SensorPretoBranco extends Sensor {
+public class SensorCor extends Sensor {
 	private EV3ColorSensor sensor;
 	
-	public SensorPretoBranco(int offSet)
+	public SensorCor(int offSet, int porta)
 	{
 		super(offSet);
-		this.sensor = new EV3ColorSensor(SensorPort.S3);
+		if(porta == 3)	this.sensor = new EV3ColorSensor(SensorPort.S3);
+		if(porta == 1)  this.sensor = new EV3ColorSensor(SensorPort.S1);
 		this.setAmostra(-1);  
 	}
+
+
 
 
 	@Override

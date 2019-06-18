@@ -1,10 +1,17 @@
+import lejos.hardware.Button;
+
 public class Uso {
 
 	public static void main(String[] args)
 	{
-		Veiculo carro = new Veiculo(true, true, true);
+		Veiculo carro = new Veiculo(false, true,true, false);
+		while(Button.ESCAPE.isUp())
+		{
+			carro.coletaAmostras();
+			System.out.println("dir"+carro.amostras[0]+" esq" + carro.amostras[1]);
+		}
 		
-		carro.setVelocidadeEsteirasGrau(300);
+		/*carro.setVelocidadeEsteirasGrau(300);
 		carro.setEsteirasForward(3);
 		carro.ev3.beep3();
 		carro.setEsteirasBackward(3);
@@ -15,7 +22,8 @@ public class Uso {
 		carro.ev3.beep4();
 		
 		
-		carro.segueLinha();
+		carro.segueLinha("direito");
+		
 		
 		carro.recuaAteColidir();
 		
@@ -32,7 +40,7 @@ public class Uso {
 			if(comando == 6 && carro.garra.isAberta()) carro.fechaGarra();
 			if(comando == 7) carro.stop();
 		}
-		
+		*/
 		carro.ev3.beep5();
 		carro.ev3.corLed(3);
 	}
