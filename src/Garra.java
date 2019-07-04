@@ -27,7 +27,7 @@ public class Garra extends MotorMedio{
 	 */
 	public void abreAng(int angulo)
 	{
-		this.motor.rotate(angulo, true);
+		this.motor.rotate(-angulo, true);
 		this.aberta = true;
 	}
 	
@@ -47,7 +47,7 @@ public class Garra extends MotorMedio{
 	 */
 	public void fechaAng(int angulo)
 	{
-		this.motor.rotateTo(-angulo, true);
+		this.motor.rotateTo(angulo, true);
 		this.aberta = false;
 	}
 	
